@@ -241,7 +241,7 @@ const SubscriberList = () => {
             <h2 className="text-xl font-bold">{subscriber.fullName}</h2>
             <p className="text-gray-400">{subscriber.email}</p>
             <p className="text-gray-400">{subscriber.phone}</p>
-            <p className="mt-2 text-gray-300">Plan: {subscriber.subscriptionPlan}</p>
+            <p className="mt-2 text-gray-300">Plan: {subscriber.membershipType}</p>
             <p className={`mt-1 ${isExpired ? 'text-red-500' : 'text-green-400'}`}>
               {isExpired ? 'Expired' : `${daysLeft} days left`} 
             </p>
