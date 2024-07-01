@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GymPanel from '../components/Gympanel';
 import SearchIcon from '../assets/icons/search-icon.svg';
-// import Employees from '../config/employees';
+import Employees from '../config/employees';
 import WhatsappIcon from '../assets/icons/whatsapp-icon.svg';
 
 const EmployeeList = () => {
@@ -33,7 +33,7 @@ const EmployeeList = () => {
         },
         // Add more employee data as needed
       ];
-      setEmployees(data as any);
+      setEmployees(Employees as any);
     };
 
     fetchEmployees();
@@ -41,7 +41,7 @@ const EmployeeList = () => {
 
   const filterEmployees = () => {
     return employees.filter((employee) =>
-      employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+      employee.fullName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 
@@ -71,7 +71,7 @@ const EmployeeList = () => {
             placeholder="Search by employee name."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-gray-700 text-white p-2 rounded-l-md w-1/3 focus:outline-none"
+            className="bg-gray-700 text-white p-2 rounded-l-md w-1/3 focus:outline-none focus:ring-blue-700"
           />
           <button className="bg-blue-600 text-white py-2 px-4 rounded-r-md hover:bg-blue-700">
             <img src={SearchIcon} alt="Search Icon" />
@@ -81,7 +81,7 @@ const EmployeeList = () => {
         {/* Employees List */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEmployees.map((employee) => (
-            <div key={employee.id} onClick={() => navigate(`/employee/profile/${employee.id}`)} className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start">
+            <div key={employee.id} onClick={() => navigate(`/employee-details/${employee.id}`)} className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start">
               <img
                 src={employee.profilePhoto}
                 alt={`${employee.name}'s profile`}

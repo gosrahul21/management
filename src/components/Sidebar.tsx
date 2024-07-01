@@ -33,7 +33,7 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
       ref={ref}
       className={`fixed inset-y-0 right-0 transform ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
-      } w-64 h-screen bg-gray-800 text-white transition-transform duration-300 ease-in-out`}
+      } w-64 h-screen bg-gray-800 text-white transition-transform duration-300 ease-in-out z-100 shadow-lg`}
     >
       <div className="p-4">
         <h1 className="text-2xl font-bold">My App</h1>
@@ -60,8 +60,8 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
         <div className="mt-2">
           <h2 className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase">Reports</h2>
           <SideBarNav title="Income and Expense" to="/reports/income-expense" icon={DashboardIcon} onClick={toggleSidebar} />
-          <SideBarNav title="Membership and Sales" to="/reports/membership-sales" icon={DashboardIcon} onClick={toggleSidebar} />
-          <SideBarNav title="Payment Dues" to="/reports/payment-dues" icon={DashboardIcon} onClick={toggleSidebar} />
+          {/* <SideBarNav title="Membership and Sales" to="/reports/membership-sales" icon={DashboardIcon} onClick={toggleSidebar} /> */}
+          {/* <SideBarNav title="Payment Dues" to="/reports/payment-dues" icon={DashboardIcon} onClick={toggleSidebar} /> */}
         </div>
       </nav>
     </div>

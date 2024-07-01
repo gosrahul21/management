@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import Input from "../widgets/Input";
 
 const SubscriptionForm = () => {
-  const [subscriptionName, setSubscriptionName] = useState('');
-  const [durationDays, setDurationDays] = useState('');
-  const [pricing, setPricing] = useState('');
+  const [subscriptionName, setSubscriptionName] = useState("");
+  const [durationDays, setDurationDays] = useState("");
+  const [pricing, setPricing] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,10 +19,14 @@ const SubscriptionForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded shadow-md text-white">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-gray-800 p-6 rounded shadow-md text-white"
+    >
       <h2 className="text-2xl mb-4">Add Subscription</h2>
       <label className="block mb-2">Subscription Name</label>
-      <input
+      <Input
+        id="subscriptionName"
         type="text"
         value={subscriptionName}
         onChange={(e) => setSubscriptionName(e.target.value)}
@@ -29,7 +34,8 @@ const SubscriptionForm = () => {
         required
       />
       <label className="block mb-2">Duration in Days</label>
-      <input
+      <Input
+        id="duration"
         type="number"
         value={durationDays}
         onChange={(e) => setDurationDays(e.target.value)}
@@ -37,14 +43,18 @@ const SubscriptionForm = () => {
         required
       />
       <label className="block mb-2">Pricing</label>
-      <input
+      <Input
+        id="pricing"
         type="number"
         value={pricing}
         onChange={(e) => setPricing(e.target.value)}
         className="w-full p-2 bg-gray-700 border border-gray-600 rounded mb-4 text-white"
         required
       />
-      <button type="submit" className="bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700">
+      <button
+        type="submit"
+        className="bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700"
+      >
         Add Subscription
       </button>
     </form>

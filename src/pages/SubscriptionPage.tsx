@@ -5,7 +5,7 @@ import SearchIcon from '../assets/icons/search-icon.svg';
 // import Subscriptions from '../config/subscriptions'; // Replace with actual subscription data import
 import Modal from '../components/Modal';
 import SubscriptionForm from '../components/SusbcriptionForm';
-// import SubscriptionForm from '../components/SubscriptionForm'; // Assuming this component handles subscription forms
+import EditIcon from '../components/EditIcon'; // Import EditIcon component
 
 const SubscriptionList = () => {
   const [subscriptions, setSubscriptions] = useState<Record<string, any>[]>([]);
@@ -44,13 +44,16 @@ const SubscriptionList = () => {
   const filteredSubscriptions = filterSubscriptions();
 
   const [isAddEditFormOpen, setIsAddEditFormOpen] = useState(false);
+  const [selectedSubscription, setSelectedSubscription] = useState(null);
 
-  const openAddEditForm = () => {
+  const openAddEditForm = (subscription = null) => {
+    setSelectedSubscription(subscription);
     setIsAddEditFormOpen(true);
   };
 
   const closeAddEditForm = () => {
     setIsAddEditFormOpen(false);
+    setSelectedSubscription(null);
   };
 
   const handleEditSubscription = () => {
@@ -61,12 +64,12 @@ const SubscriptionList = () => {
   return (
     <GymPanel>
       <div className='p-6'>
-        <Modal isOpen={isAddEditFormOpen} onClose={closeAddEditForm} title={"Add Subscription"}>
-          <SubscriptionForm onSubmit={handleEditSubscription} />
+        <Modal isOpen={isAddEditFormOpen} onClose={closeAddEditForm} title={selectedSubscription ? "Edit Subscription" : "Add Subscription"}>
+          <SubscriptionForm onSubmit={handleEditSubscription} subscription={selectedSubscription} />
         </Modal>
         <div className="p-4 rounded-lg mb-6 flex justify-between items-center">
           <h1 className="text-3xl font-bold">Subscriptions</h1>
-          <button onClick={openAddEditForm} className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+          <button onClick={() => openAddEditForm()} className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
             Add Subscription
           </button>
         </div>
@@ -88,12 +91,16 @@ const SubscriptionList = () => {
         {/* Subscriptions List */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredSubscriptions.map((subscription) => (
-            <div key={subscription.id} className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start cursor-pointer"
+            <div key={subscription.id} className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start relative cursor-pointer"
               onClick={() => navigate(`/subscription/profile/${subscription.id}`)}>
               <div>
                 <h2 className="text-xl font-bold">{subscription.name}</h2>
                 <p className="text-gray-400">Price: {subscription.price}</p>
               </div>
+              <EditIcon onClick={(e) => {
+                e.stopPropagation();
+                openAddEditForm(subscription);
+              }} />
             </div>
           ))}
         </div>

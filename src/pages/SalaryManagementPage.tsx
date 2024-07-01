@@ -3,6 +3,7 @@ import GymPanel from '../components/Gympanel';
 import Modal from '../components/Modal';
 import SalaryForm from '../components/SalaryForm'; // Assuming this component handles salary forms
 import { useNavigate } from 'react-router-dom';
+import { MdEdit } from "react-icons/md";
 
 const SalaryManagementPage = () => {
   const [employees, setEmployees] = useState([]);
@@ -69,7 +70,7 @@ const SalaryManagementPage = () => {
               </div>
               <div className="ml-auto">
                 <button onClick={() => openAddEditForm(employee)} className="bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded ml-2">
-                  Edit
+                  <MdEdit/>
                 </button>
               </div>
             </div>

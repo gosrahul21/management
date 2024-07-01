@@ -67,13 +67,14 @@ const RevenueExpensesTable = ({ data, type, darkMode }) => {
         title="Edit Expense"
       >
         {/* Modal Content */}
-        <form onSubmit={handleEditExpense} className="space-y-4">
+        <form onSubmit={handleEditExpense} className="space-y-4 gap-1" >
           {/* Form fields for editing expense */}
           <label htmlFor="expenseAmount">Expense Amount:</label>
           <input
             type="text"
             id="expenseAmount"
             name="expenseAmount"
+            className='bg-gray-700 border border-gray-600 rounded mb-4 text-white ml-1'
             // Add necessary onChange handlers
             // Set initial values using state or props
           />

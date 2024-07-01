@@ -38,6 +38,7 @@ const GymDashboard = () => {
       legend: {
         display: true,
         position: "bottom",
+        color:"white"
       },
     },
     elements: {
@@ -91,9 +92,9 @@ const GymDashboard = () => {
 
   return (
     <GymPanel>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 z-10">
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center justify-center">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaUser className="text-4xl mr-4" />
             <div>
               <h2 className="text-2xl font-bold mb-2 text-center">
@@ -105,22 +106,16 @@ const GymDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold mb-2 text-center">
-              Active Clients
+              Clients
             </h2>
-            <div className="absolute inset-0 flex items-center justify-start">
-              {/* <p>Active Clients: 300</p> */}
-            </div>
             <div className="h-[200px] w-[200px] mx-auto relative">
               <Doughnut data={memberData} options={commonOptions} />
-              {/* <div className="absolute inset-0 flex items-center justify-start">
-                
-              </div> */}
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center justify-center">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaUser className="text-4xl mr-4" />
             <div>
               <h2 className="text-2xl font-bold mb-2 text-center">
@@ -132,7 +127,7 @@ const GymDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center justify-center">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaUser className="text-4xl mr-4" />
             <div>
               <h2 className="text-2xl font-bold mb-2 text-center">
@@ -144,7 +139,7 @@ const GymDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold mb-2 text-center">
               Total Enquiries
             </h2>
@@ -160,7 +155,7 @@ const GymDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center justify-center">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaQuestionCircle className="text-4xl mr-4" />
             <div>
               <h2 className="text-2xl font-bold mb-2 text-center">
@@ -172,7 +167,7 @@ const GymDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center justify-center">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaExclamationCircle className="text-4xl mr-4" />
             <div>
               <h2 className="text-2xl font-bold mb-2 text-center">
@@ -184,7 +179,7 @@ const GymDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center justify-center">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaDollarSign className="text-4xl mr-4" />
             <div>
               <h2 className="text-2xl font-bold mb-2 text-center">
@@ -196,7 +191,7 @@ const GymDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center justify-center">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaDollarSign className="text-4xl mr-4" />
             <div>
               <h2 className="text-2xl font-bold mb-2 text-center">
@@ -208,7 +203,7 @@ const GymDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold mb-2 text-center">
               This Month's Revenue
             </h2>
@@ -224,7 +219,7 @@ const GymDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center justify-center">
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaDollarSign className="text-4xl mr-4" />
             <div>
               <h2 className="text-2xl font-bold mb-2 text-center">
@@ -238,7 +233,7 @@ const GymDashboard = () => {
 
           <div
             onClick={() => navigate("/details")}
-            className="bg-gray-800 p-4 rounded-lg shadow-md cursor-pointer flex items-center justify-center"
+            className="bg-gray-800 p-4 rounded-xl shadow-md cursor-pointer flex items-center justify-center"
           >
             <FaChartPie className="text-4xl mr-4" />
             <div>
