@@ -1,17 +1,21 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { createGym } from "../service/gymService";
+import { useNavigate } from "react-router-dom";
 
 const GymForm = () => {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [pincode, setPincode] = useState('');
-  const [state, setState] = useState('');
-  const [country, setCountry] = useState('');
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
   const [facilities, setFacilities] = useState([]);
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
 
-  const handleSubmit = (e: any) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newGym = {
       name,
@@ -25,18 +29,31 @@ const GymForm = () => {
         phone,
         email,
       },
-      userId: 'user_id_here',
     };
-    console.log(newGym);
+
+    try {
+      const response = await createGym(newGym); // Call the createGym service
+      console.log("Gym created successfully:", response);
+      navigate("/dashboard");
+      // Reset form fields or handle success response
+    } catch (error) {
+      console.error("Error creating gym:", error);
+      // Handle error response
+    }
   };
 
   const handleFacilitiesChange = (e: any) => {
-    const facilitiesArray = e.target.value.split(',').map((item: string) => item.trim());
+    const facilitiesArray = e.target.value
+      .split(",")
+      .map((item: string) => item.trim());
     setFacilities(facilitiesArray);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded shadow-md text-white">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-gray-800 p-6 rounded shadow-md text-white"
+    >
       <h2 className="text-2xl mb-4">Create Gym</h2>
       <label className="block mb-2">Gym Name</label>
       <input
@@ -101,7 +118,7 @@ const GymForm = () => {
       <label className="block mb-2">Facilities (comma-separated)</label>
       <input
         type="text"
-        value={facilities.join(', ')}
+        value={facilities.join(", ")}
         onChange={handleFacilitiesChange}
         className="w-full p-2 bg-gray-700 border border-gray-600 rounded mb-4 text-white"
       />
@@ -121,7 +138,10 @@ const GymForm = () => {
         className="w-full p-2 bg-gray-700 border border-gray-600 rounded mb-4 text-white"
         required
       />
-      <button type="submit" className="bg-primary text-white py-2 px-4 rounded bg-purple-600 hover:bg-purple-700">
+      <button
+        type="submit"
+        className="bg-primary text-white py-2 px-4 rounded bg-purple-600 hover:bg-purple-700"
+      >
         Create Gym
       </button>
     </form>

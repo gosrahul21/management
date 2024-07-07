@@ -23,42 +23,59 @@ import InquiryList from "./pages/EnquiryList";
 import Notifications from "./pages/Notification";
 import ManageLeaves from "./pages/ManageLeaves";
 import EmployeeDetails from "./pages/EmployeeDetails";
+import { AuthProvider } from "./context/authContext";
+import { GymProvider } from "./context/GymContext";
 
 function App() {
   return (
     <GoogleOAuthProvider clientId="413773176963-f3r41461irvbjq00pboait6hd6aikf12.apps.googleusercontent.com">
       <Router>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/create-gym" element={<GymPage />} />
-          <Route path="/add-employee" element={<EmployeePage />} />
-          <Route path="/subscription" element={<SubscriptionPage />} />
-          <Route path="/subscribe-gym" element={<SubscriberPage />} />
-          <Route path="/gym/dashboard/:id" element={<GymDashboard />} />
-          <Route path="/subscribers" element={<SubscriberList />} />{" "}
-          {/* Add the route for SubscriberList */}
-          <Route path="/employees" element={<EmployeeList />} />
-          <Route path="/salary-management" element={<SalaryManagementPage />} />
-          <Route path="/groups" element={<GroupList />} />
-          <Route path="/payment" element={<PaymentPage />} />{" "}
-          {/* Add the route for the PaymentPage */}
-          <Route path="/acknowledgement" element={<AcknowledgementPage />} />
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/subscriber/profile/:id" element={<UserProfile />} />
-          <Route
-            path="/reports/income-expense"
-            element={<ExpenseRevenueDashboard />}
-          />
-          <Route path="/shop" element={<ShopPage />} />{" "}
-          <Route path="/attendance" element={<AttendanceDashboard />} />
-          <Route path="/enquiry" element={<InquiryList />} />
-
-          <Route path="/group-attendance" element={<GroupAttendancePage />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/staffs/manage-leaves" element={<ManageLeaves />} />
-          <Route path="/employee-details/:id" element={<EmployeeDetails/>}/>
-        </Routes>
+        <AuthProvider>
+          <GymProvider>
+            <Routes>
+              <Route path="/" element={<LoginPage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/create-gym" element={<GymPage />} />
+              <Route path="/gym/:gymId/add-employee" element={<EmployeePage />} />
+              <Route path="/gym/:gymId/subscription" element={<SubscriptionPage />} />
+              <Route path="/subscribe-gym" element={<SubscriberPage />} />
+              <Route path="/gym/:gymId/dashboard" element={<GymDashboard />} />
+              <Route path="/gym/:gymId/subscribers" element={<SubscriberList />} />{" "}
+              {/* Add the route for SubscriberList */}
+              <Route path="/gym/:gymId/employees" element={<EmployeeList />} />
+              <Route
+                path="/gym/:gymId/salary-management"
+                element={<SalaryManagementPage />}
+              />
+              <Route path="/gym/:gymId/groups" element={<GroupList />} />
+              <Route path="/gym/:gymId/payment" element={<PaymentPage />} />{" "}
+              {/* Add the route for the PaymentPage */}
+              <Route
+                path="/acknowledgement"
+                element={<AcknowledgementPage />}
+              />
+              <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/gym/:gymId/subscriber/profile/:id" element={<UserProfile />} />
+              <Route
+                path="/reports/income-expense"
+                element={<ExpenseRevenueDashboard />}
+              />
+              <Route path="/gym/:gymId/shop" element={<ShopPage />} />{" "}
+              <Route path="/gym/:gymId/attendance" element={<AttendanceDashboard />} />
+              <Route path="/gym/:gymId/enquiry" element={<InquiryList />} />
+              <Route
+                path="/group-attendance"
+                element={<GroupAttendancePage />}
+              />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/staffs/manage-leaves" element={<ManageLeaves />} />
+              <Route
+                path="/employee-details/:id"
+                element={<EmployeeDetails />}
+              />
+            </Routes>
+          </GymProvider>
+        </AuthProvider>
       </Router>
     </GoogleOAuthProvider>
   );

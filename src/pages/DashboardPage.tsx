@@ -4,27 +4,24 @@ import GymCard from '../components/GymCard';
 import AddIcon from '../assets/icons/add-icon.svg';
 import Avatar from '../widgets/Avatar';
 import SearchIcon from '../assets/icons/search-icon.svg';
+import { fetchGyms } from '../service/gymService';
 
 const DashboardPage = () => {
   const [gyms, setGyms] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  // Example: Fetch gyms data from API or local storage
   useEffect(() => {
-    // Replace with actual fetch logic
-    const fetchGyms = async () => {
-      // Simulated gyms data
-      const data = [
-        { id: 1, name: 'Fitness Zone', image: '/arrowgym.jpeg', role: 'Owner', subscribed: true },
-        { id: 2, name: 'Power Gym', image: '/powergym.jpeg', role: 'Trainer', subscribed: false },
-        { id: 3, name: 'Fitness Zone', image: '/arrowgym.jpeg', role: 'Owner', subscribed: true },
-        { id: 4, name: 'Power Gym', image: '/powergym.jpeg', role: 'Trainer', subscribed: false },
-      ];
-      setGyms(data);
+    const getGyms = async () => {
+      try {
+        const data = await fetchGyms();
+        setGyms(data);
+      } catch (error) {
+        console.error('Error fetching gyms', error);
+      }
     };
 
-    fetchGyms();
+    getGyms();
   }, []);
 
   // Filter gyms based on search term
@@ -68,7 +65,7 @@ const DashboardPage = () => {
         </section>
         <section className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {filteredGyms.map((gym) => (
-            <GymCard onClick={()=>navigate('/gym/dashboard/'+gym.id)} key={gym.id} gym={gym} />
+            <GymCard onClick={() => navigate(`/gym/${gym._id}/dashboard`)} key={gym._id} gym={gym} />
           ))}
         </section>
       </main>

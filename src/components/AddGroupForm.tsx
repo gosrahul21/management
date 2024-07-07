@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Input from "../widgets/Input";
 
-const AddGroupForm = () => {
+const AddGroupForm = ({ onFormSubmit }: any) => {
   const [groupName, setGroupName] = useState("");
-  const [weekdays, setWeekdays] = useState([]);
+  const [weekdays, setWeekdays] = useState<string[]>([]);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
-  const handleWeekdayChange = (day) => {
+  const handleWeekdayChange = (day: string) => {
     if (weekdays.includes(day)) {
       setWeekdays(weekdays.filter((d) => d !== day));
     } else {
@@ -15,15 +15,20 @@ const AddGroupForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log({
-      groupName,
-      weekdays,
-      startTime,
-      endTime,
-    });
+    try {
+      onFormSubmit({
+        groupName,
+        weekdays,
+        startTime,
+        endTime,
+      });
+    } catch (error) {
+      console.log("error occured on creating group");
+    }
+
     // Reset form fields after submission if needed
   };
 

@@ -4,11 +4,12 @@ import CloseIcon from "../assets/icons/close-icon.svg";
 
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
+import { useGym } from "../context/GymContext";
 
-const GymHeader = ({ gymDetails }: any) => {
+const GymHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const sidebarRef = useRef({});
-
+  const {gym} = useGym()
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -27,8 +28,8 @@ const GymHeader = ({ gymDetails }: any) => {
         openSidebar();
       }
       // console.log(sidebarRef.current.offsetWidth)
-      if(e.clientX<window.innerWidth-sidebarRef.current.offsetWidth){
-        closeSidebar()
+      if (e.clientX < window.innerWidth - sidebarRef.current.offsetWidth) {
+        closeSidebar();
       }
     };
 
@@ -53,8 +54,8 @@ const GymHeader = ({ gymDetails }: any) => {
 
       <div className=" mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">{gymDetails.name}</h1>
-          <p className="text-lg">{gymDetails.location}</p>
+          <h1 className="text-3xl font-bold">{gym?.name}</h1>
+          <p className="text-lg">{gym?.address}, {gym?.city}</p>
         </div>
         <div className="flex items-center">
           <div className="relative dropdown">
