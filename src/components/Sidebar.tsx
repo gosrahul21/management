@@ -1,5 +1,6 @@
-// src/components/Sidebar.js
 import React, { forwardRef } from "react";
+import { NavLink } from "react-router-dom";
+import { useGym } from "../context/GymContext";
 import DashboardIcon from "../assets/icons/dashboard.svg";
 import GroupIcon from "../assets/icons/groups-icon.svg";
 import AttendanceIcon from "../assets/icons/attendance.svg";
@@ -9,8 +10,6 @@ import EmployeesIcon from "../assets/icons/employees-icon.svg";
 import ShopIcon from "../assets/icons/shop-icon.svg";
 import SalaryIcon from "../assets/icons/salary-icon.svg";
 import NotificationIcon from "../assets/icons/notification.svg";
-import { NavLink } from "react-router-dom";
-import { useGym } from "../context/GymContext";
 
 const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
   const { gym } = useGym();
@@ -19,7 +18,7 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
     return (
       <NavLink
         to={to}
-        className="block px-4 py-2 mt-1 text-sm text-gray-200 hover:bg-gray-600 rounded flex gap-2"
+        className="px-4 py-2 mt-1 text-sm text-gray-200 hover:bg-gray-600 rounded flex gap-2"
         onClick={onClick}
       >
         <img
@@ -37,7 +36,7 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
       ref={ref}
       className={`fixed inset-y-0 right-0 transform ${
         isOpen ? "translate-x-0" : "translate-x-full"
-      } w-64 h-screen bg-gray-800 text-white transition-transform duration-300 ease-in-out z-100 shadow-lg`}
+      } w-64 h-screen bg-gray-800 text-white transition-transform duration-300 ease-in-out z-10 shadow-lg`}
     >
       <div className="p-4">
         <h1 className="text-2xl font-bold">My App</h1>
@@ -67,13 +66,13 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
           />
           <SideBarNav
             title="Attendance"
-            to="/attendance"
+            to={`/gym/${gym?._id}/attendance`}
             icon={AttendanceIcon}
             onClick={toggleSidebar}
           />
           <SideBarNav
             title="Memberships Plan"
-            to="/subscription"
+            to={`/gym/${gym?._id}/subscription`}
             icon={MembershipPlanIcon}
             onClick={toggleSidebar}
           />
@@ -84,32 +83,32 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
           </h2>
           <SideBarNav
             title="Employees"
-            to="/employees"
+            to={`/gym/${gym?._id}/employees`}
             icon={EmployeesIcon}
             onClick={toggleSidebar}
           />
           <SideBarNav
             title="Attendance"
-            to="/staffs/attendance"
+            to={`/gym/${gym?._id}/staffs/attendance`}
             icon={AttendanceIcon}
             onClick={toggleSidebar}
           />
           <SideBarNav
             title="Salary Management"
-            to="/salary-management"
+            to={`/gym/${gym?._id}/salary-management`}
             icon={SalaryIcon}
             onClick={toggleSidebar}
           />
           <SideBarNav
             title="Manage Leaves"
-            to="/staffs/manage-leaves"
+            to={`/gym/${gym?._id}/staffs/manage-leaves`}
             icon={AttendanceIcon}
             onClick={toggleSidebar}
           />
         </div>
         <SideBarNav
           title="Enquiry"
-          to="/enquiry"
+          to={`/gym/${gym?._id}/enquiry`}
           icon={DashboardIcon}
           onClick={toggleSidebar}
         />
@@ -121,7 +120,7 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
         />
         <SideBarNav
           title="Shop"
-          to="/shop"
+          to={`/gym/${gym?._id}/shop`}
           icon={ShopIcon}
           onClick={toggleSidebar}
         />
@@ -135,8 +134,6 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
             icon={DashboardIcon}
             onClick={toggleSidebar}
           />
-          {/* <SideBarNav title="Membership and Sales" to="/reports/membership-sales" icon={DashboardIcon} onClick={toggleSidebar} /> */}
-          {/* <SideBarNav title="Payment Dues" to="/reports/payment-dues" icon={DashboardIcon} onClick={toggleSidebar} /> */}
         </div>
       </nav>
     </div>

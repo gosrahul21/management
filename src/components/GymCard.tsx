@@ -1,4 +1,3 @@
-import React from 'react';
 import SettingIcon from '../assets/icons/setting-icon.svg'
 
 const GymCard = ({ gym, onClick }: {
@@ -7,7 +6,7 @@ const GymCard = ({ gym, onClick }: {
 }) => {
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden shadow-md">
-      <img src={gym.image} alt={gym.name} className="w-full h-56 object-cover" />
+      <img src={`http://localhost:3000/image/${gym.image}`} alt={gym.name} className="w-full h-56 object-cover" />
       <div className="p-4">
         <h3 className="text-xl font-semibold">{gym.name}</h3>
         <p className="text-gray-400 mb-2">Role: {gym.role}</p>

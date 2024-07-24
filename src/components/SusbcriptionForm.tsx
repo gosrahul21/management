@@ -1,21 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../widgets/Input";
+import { useGym } from "../context/GymContext";
 
-const SubscriptionForm = () => {
+const SubscriptionForm = ({ selectedSusbcription, onSubmit, onDelete }) => {
   const [subscriptionName, setSubscriptionName] = useState("");
   const [durationDays, setDurationDays] = useState("");
   const [pricing, setPricing] = useState("");
+  const gymDetails = useGym();
+
+  useEffect(() => {
+    if (selectedSusbcription) {
+      setSubscriptionName(selectedSusbcription.planName || "");
+      setDurationDays(selectedSusbcription.durationInDays?.toString() || "");
+      setPricing(selectedSusbcription.price || "");
+    }
+  }, [selectedSusbcription]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle subscription addition logic here
-    const newSubscription = {
-      name: subscriptionName,
-      durationDays: parseInt(durationDays),
-      pricing: parseFloat(pricing),
-    };
-    console.log(newSubscription);
-    // You can implement API calls or state management logic here to save the subscription
+    onSubmit({
+      planName: subscriptionName,
+      durationInDays: parseFloat(durationDays),
+      price: pricing,
+      gymId: gymDetails.gym._id,
+    });
   };
 
   return (
@@ -23,7 +31,6 @@ const SubscriptionForm = () => {
       onSubmit={handleSubmit}
       className="bg-gray-800 p-6 rounded shadow-md text-white"
     >
-      <h2 className="text-2xl mb-4">Add Subscription</h2>
       <label className="block mb-2">Subscription Name</label>
       <Input
         id="subscriptionName"
@@ -51,12 +58,23 @@ const SubscriptionForm = () => {
         className="w-full p-2 bg-gray-700 border border-gray-600 rounded mb-4 text-white"
         required
       />
-      <button
-        type="submit"
-        className="bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700"
-      >
-        Add Subscription
-      </button>
+      <div className="flex items-center">
+        <button
+          type="submit"
+          className="bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 mr-2"
+        >
+          {selectedSusbcription ? "Update Subscription" : "Add Subscription"}
+        </button>
+        {selectedSusbcription && (
+          <button
+            type="button"
+            onClick={onDelete}
+            className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
+          >
+            Delete Subscription
+          </button>
+        )}
+      </div>
     </form>
   );
 };

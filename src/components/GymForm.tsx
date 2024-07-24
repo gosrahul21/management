@@ -1,22 +1,38 @@
-import { useState } from "react";
-import { createGym } from "../service/gymService";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { createGym } from '../service/gym/gymService';
+import { useNavigate } from 'react-router-dom';
+import { useDropzone } from 'react-dropzone';
+import { uploadImage } from '../service/upload/imageUpload';
 
 const GymForm = () => {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
   const [facilities, setFacilities] = useState([]);
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [imageFile, setImageFile] = useState(null);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let image = null;
+    if (imageFile) {
+      try {
+        const uploadResponse = await uploadImage(imageFile);
+        image = uploadResponse._id; // Assuming your API returns the URL of the uploaded image
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        // Handle error response
+        return;
+      }
+    }
+
     const newGym = {
       name,
       address,
@@ -29,25 +45,31 @@ const GymForm = () => {
         phone,
         email,
       },
+      image, // Include the image URL in the gym data
     };
 
     try {
-      const response = await createGym(newGym); // Call the createGym service
-      console.log("Gym created successfully:", response);
-      navigate("/dashboard");
+      const response = await createGym(newGym);
+      console.log('Gym created successfully:', response);
+      navigate('/dashboard');
       // Reset form fields or handle success response
     } catch (error) {
-      console.error("Error creating gym:", error);
+      console.error('Error creating gym:', error);
       // Handle error response
     }
   };
 
-  const handleFacilitiesChange = (e: any) => {
-    const facilitiesArray = e.target.value
-      .split(",")
-      .map((item: string) => item.trim());
+  const handleFacilitiesChange = (e) => {
+    const facilitiesArray = e.target.value.split(',').map((item: string) => item.trim());
     setFacilities(facilitiesArray);
   };
+
+  const onDrop = (acceptedFiles: any) => {
+    console.log(acceptedFiles[0])
+    setImageFile(acceptedFiles[0]);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' });
 
   return (
     <form
@@ -118,7 +140,7 @@ const GymForm = () => {
       <label className="block mb-2">Facilities (comma-separated)</label>
       <input
         type="text"
-        value={facilities.join(", ")}
+        value={facilities.join(', ')}
         onChange={handleFacilitiesChange}
         className="w-full p-2 bg-gray-700 border border-gray-600 rounded mb-4 text-white"
       />
@@ -138,6 +160,23 @@ const GymForm = () => {
         className="w-full p-2 bg-gray-700 border border-gray-600 rounded mb-4 text-white"
         required
       />
+
+      <div
+        {...getRootProps()}
+        className="w-full p-6 bg-gray-700 border border-gray-600 rounded mb-4 text-white text-center cursor-pointer"
+      >
+        <input {...getInputProps()} />
+        {imageFile ? (
+          <img
+            src={URL.createObjectURL(imageFile)}
+            alt="Preview"
+            className="w-full h-48 object-cover rounded mb-4"
+          />
+        ) : (
+          <p>Drag and drop an image, or click to select one</p>
+        )}
+      </div>
+
       <button
         type="submit"
         className="bg-primary text-white py-2 px-4 rounded bg-purple-600 hover:bg-purple-700"

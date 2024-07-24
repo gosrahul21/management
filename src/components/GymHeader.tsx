@@ -51,7 +51,6 @@ const GymHeader = () => {
   return (
     <header className="bg-gray-800 z-100 p-4 sticky top-0 shadow-lg">
       <Sidebar ref={sidebarRef} isOpen={isOpen} toggleSidebar={toggleSidebar} />
-
       <div className=" mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">{gym?.name}</h1>

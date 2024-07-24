@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <>
       {/* Overlay */}
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
-        <div className="relative w-auto max-w-3xl mx-auto my-6">
+        <div ref={modalRef} className="relative w-auto max-w-3xl mx-auto my-6">
           {/* Content */}
           <div className="relative bg-gray-800 rounded-lg shadow-lg outline-none focus:outline-none">
             {/* Header */}

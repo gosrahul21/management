@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Doughnut } from "react-chartjs-2";
 import { ArcElement, Chart, Tooltip, Legend } from "chart.js";
 import { chartColors } from "../utils/color";
@@ -7,17 +7,19 @@ import {
   FaUser,
   FaDollarSign,
   FaQuestionCircle,
-  FaChartPie,
   FaExclamationCircle,
 } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { getMembersDashboard } from "../service/susbcriber/getMemberDashboard";
+import getTotalRevenue from "../service/revenue/getTotalRevue";
+import { getExpenses } from "../service/expense/getExpense";
+import { getTotalEnquiries } from "../service/enquiries/getTotalEnquiries";
 
 Chart.register(ArcElement, Legend, Tooltip);
 
 const GymDashboard = () => {
   const navigate = useNavigate();
-
-  // Mock Data
-  const gymDetails = {
+  const [gymDetails, setGymDetails] = useState<any>({
     totalClients: 500,
     activeClients: 350,
     newClients: 50,
@@ -30,6 +32,48 @@ const GymDashboard = () => {
     expensesThisYear: 60000,
     revenueThisMonth: 15000,
     expensesThisMonth: 5000,
+  });
+  const { gymId } = useParams();
+
+  // Mock Data
+  // const gymDetails = {
+  //   totalClients: 500,
+  //   activeClients: 350,
+  //   newClients: 50,
+  //   totalEmployees: 25,
+  //   totalTrainers: 10,
+  //   totalEnquiries: 120,
+  //   newEnquiries: 30,
+  //   expiringMemberships: 20,
+  //   revenueThisYear: 150000,
+  //   expensesThisYear: 60000,
+  //   revenueThisMonth: 15000,
+  //   expensesThisMonth: 5000,
+  // };
+
+  useEffect(() => {
+    if (!gymId) return;
+    fetchMemberDashboard();
+  }, [gymId]);
+
+  const fetchMemberDashboard = async () => {
+    const memberDashBoardData = await getMembersDashboard(gymId!);
+    const today = new Date();
+    const thisYear = today.getFullYear();
+
+    const fromDate = new Date(thisYear, 0, 1); // January 1st of this year
+    const toDate = new Date(thisYear, 11, 31); // December 31
+    const getRevenue = await getTotalRevenue(gymId!, fromDate, toDate);
+    const expenses = await getExpenses(gymId!, fromDate, toDate);
+    const totalEnquiries = await getTotalEnquiries(gymId!, fromDate, toDate);
+    setGymDetails({
+      ...gymDetails,
+      ...memberDashBoardData,
+      revenueThisYear: getRevenue.revenue,
+      expiringMemberships: memberDashBoardData.membershipExpiring,
+      expensesThisYear: expenses.totalExpenses,
+      ...totalEnquiries,
+    });
   };
 
   const commonOptions = {
@@ -38,7 +82,7 @@ const GymDashboard = () => {
       legend: {
         display: true,
         position: "bottom",
-        color:"white"
+        color: "white",
       },
     },
     elements: {
@@ -107,9 +151,7 @@ const GymDashboard = () => {
           </div>
 
           <div className="bg-gray-800 p-4 rounded-xl shadow-md">
-            <h2 className="text-2xl font-bold mb-2 text-center">
-              Clients
-            </h2>
+            <h2 className="text-2xl font-bold mb-2 text-center">Clients</h2>
             <div className="h-[200px] w-[200px] mx-auto relative">
               <Doughnut data={memberData} options={commonOptions} />
             </div>
@@ -138,35 +180,6 @@ const GymDashboard = () => {
               </p>
             </div>
           </div>
-
-          <div className="bg-gray-800 p-4 rounded-xl shadow-md">
-            <h2 className="text-2xl font-bold mb-2 text-center">
-              Total Enquiries
-            </h2>
-            <div className="h-[200px] w-[200px] mx-auto relative">
-              <Doughnut data={enquiryData} options={commonOptions} />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <p className="text-center">
-                  New: {gymDetails.newEnquiries}
-                  <br />
-                  Total: {gymDetails.totalEnquiries}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
-            <FaQuestionCircle className="text-4xl mr-4" />
-            <div>
-              <h2 className="text-2xl font-bold mb-2 text-center">
-                New Enquiries
-              </h2>
-              <p className="text-4xl font-semibold text-center">
-                {gymDetails.newEnquiries}
-              </p>
-            </div>
-          </div>
-
           <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaExclamationCircle className="text-4xl mr-4" />
             <div>
@@ -202,8 +215,39 @@ const GymDashboard = () => {
               </p>
             </div>
           </div>
+          
 
           <div className="bg-gray-800 p-4 rounded-xl shadow-md">
+            <h2 className="text-2xl font-bold mb-2 text-center">
+              Total Enquiries
+            </h2>
+            <div className="h-[200px] w-[200px] mx-auto relative">
+              <Doughnut data={enquiryData} options={commonOptions} />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <p className="text-center">
+                  New: {gymDetails.newEnquiries}
+                  <br />
+                  Total: {gymDetails.totalEnquiries}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
+            <FaQuestionCircle className="text-4xl mr-4" />
+            <div>
+              <h2 className="text-2xl font-bold mb-2 text-center">
+                New Enquiries
+              </h2>
+              <p className="text-4xl font-semibold text-center">
+                {gymDetails.newEnquiries}
+              </p>
+            </div>
+          </div>
+
+
+
+          {/* <div className="bg-gray-800 p-4 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold mb-2 text-center">
               This Month's Revenue
             </h2>
@@ -217,9 +261,9 @@ const GymDashboard = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
+          {/* <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaDollarSign className="text-4xl mr-4" />
             <div>
               <h2 className="text-2xl font-bold mb-2 text-center">
@@ -229,9 +273,9 @@ const GymDashboard = () => {
                 ${gymDetails.expensesThisMonth}
               </p>
             </div>
-          </div>
+          </div> */}
 
-          <div
+          {/* <div
             onClick={() => navigate("/details")}
             className="bg-gray-800 p-4 rounded-xl shadow-md cursor-pointer flex items-center justify-center"
           >
@@ -244,7 +288,7 @@ const GymDashboard = () => {
                 Click here for more details
               </p>
             </div>
-          </div>
+          </div> */}
         </section>
       </main>
     </GymPanel>

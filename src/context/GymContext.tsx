@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { getGymDetails } from "../service/gymService";
+import { getGymDetails } from "../service/gym/gymService";
 
 const GymContext = createContext<{
   gym: any | null;
@@ -16,7 +16,7 @@ export const GymProvider = ({ children }: any) => {
   const params = useParams();
 
   useEffect(() => {
-    console.log(params)
+    console.log(params);
     if (!params) return;
 
     fetchGymDetails();

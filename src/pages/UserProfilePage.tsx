@@ -10,7 +10,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 
 const UserProfile = () => {
   const {id} = useParams();
-  const user = users[parseInt(id!)-1];
+  const user = users[1-1];
   // Mock data for visualizations
   const attendanceData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
