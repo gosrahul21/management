@@ -1,52 +1,39 @@
+// components/EmployeeList.js
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import GymPanel from "../components/Gympanel";
 import SearchIcon from "../assets/icons/search-icon.svg";
-import Employees from "../config/employees";
 import WhatsappIcon from "../assets/icons/whatsapp-icon.svg";
-import { useGym } from "../context/GymContext";
+import { getEmployees } from "../service/employees/getEmployees";
 
 const EmployeeList = () => {
-  const [employees, setEmployees] = useState<Record<string, string>[]>([]);
+  const [employees, setEmployees] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-
   const { gymId } = useParams();
 
   useEffect(() => {
-    // Simulated fetch for employee data (replace with actual API call)
-    const fetchEmployees = async () => {
-      // Simulated data
-      const data = [
-        {
-          id: 1,
-          name: "John Doe",
-          email: "john.doe@example.com",
-          phone: "123-456-7890",
-          profilePhoto:
-            "https://imgs.search.brave.com/jT7IUn2ncPcSP3ti97qt6nxlDHvMYHv9IuTNUnN_iyY/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9j/bG9zZS11cC1wb3J0/cmFpdC1hdHRyYWN0/aXZlLW1hbGUtbW9k/ZWwteW91bmctaGFu/ZHNvbWUtbWFuLWJh/cl8xNTg1OTUtNTEz/NC5qcGc_c2l6ZT02/MjYmZXh0PWpwZw",
-          role: "Manager",
-        },
-        {
-          id: 2,
-          name: "Jane Smith",
-          email: "jane.smith@example.com",
-          phone: "098-765-4321",
-          profilePhoto:
-            "https://imgs.search.brave.com/Hv5Z7zQWfTTqpwY_AQ5XBDcyQMr14UwMAB09ZkBrLrI/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE0/OTQ3OTAxMDgzNzct/YmU5YzI5YjI5MzMw/P3E9ODAmdz0xMDAw/JmF1dG89Zm9ybWF0/JmZpdD1jcm9wJml4/bGliPXJiLTQuMC4z/Jml4aWQ9TTN3eE1q/QTNmREI4TUh4elpX/RnlZMmg4TVRGOGZH/aGhjSEI1SlRJd1oy/bHliSHhsYm53d2ZI/d3dmSHg4TUE9PQ",
-          role: "Trainer",
-        },
-        // Add more employee data as needed
-      ];
-      setEmployees(Employees as any);
-    };
+    if (!gymId) return;
 
     fetchEmployees();
-  }, []);
+  }, [gymId]);
+
+  const fetchEmployees = async () => {
+    try {
+      const data = await getEmployees(gymId!);
+      setEmployees(data);
+    } catch (error: any) {
+      setError(error.message || "Failed to fetch employees");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const filterEmployees = () => {
-    return employees.filter((employee) =>
-      employee.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+    return employees.filter((employee: any) =>
+      employee.userId.firstName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 
@@ -60,6 +47,14 @@ const EmployeeList = () => {
   };
 
   const filteredEmployees = filterEmployees();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
 
   return (
     <GymPanel>
@@ -92,26 +87,30 @@ const EmployeeList = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEmployees.map((employee) => (
             <div
-              key={employee.id}
-              onClick={() => navigate(`/employee-details/${employee.id}`)}
+              key={employee._id}
+              onClick={() => navigate(`/employee-details/${employee._id}`)}
               className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start"
             >
               <img
-                src={employee.profilePhoto}
+                src={`http://localhost:3000/image/${employee.userId.image}`}
                 alt={`${employee.name}'s profile`}
                 className="w-20 h-20 rounded-full mr-4 object-cover"
               />
               <div>
-                <h2 className="text-xl font-bold">{employee.name}</h2>
+                <h2 className="text-xl font-bold">{employee.userId.firstName} {employee.userId.lastName}</h2>
                 <p className="text-gray-400">{employee.email}</p>
-                <p className="text-gray-400">{employee.phone}</p>
+                <p className="text-gray-400">{employee.phoneNo}</p>
                 <p className="mt-2 text-gray-300">Role: {employee.role}</p>
               </div>
               <div className="flex-1 flex justify-end">
                 <img
                   src={WhatsappIcon}
-                  onClick={() => sendMessageOnWhatsApp(employee)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    sendMessageOnWhatsApp(employee);
+                  }}
                   className="h-10 w-10 cursor-pointer"
+                  alt="WhatsApp Icon"
                 />
               </div>
             </div>

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import GymPage from "./pages/GymPage";
-import EmployeePage from "./pages/EmployeePage";
+import EmployeePage from "./pages/employee/AddEmployeePage";
 import SubscriptionPage from "./pages/susbcription-page/SubscriptionPage";
 import SubscriberPage from "./pages/SubscriberPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -26,7 +26,6 @@ import EmployeeDetails from "./pages/EmployeeDetails";
 import { AuthProvider } from "./context/authContext";
 import { GymProvider } from "./context/GymContext";
 import AddSubscriptionPage from "./pages/subscribers/AddSubscripionPage";
-import CheckIn from "./pages/CheckIn";
 
 function App() {
   return (
@@ -35,8 +34,8 @@ function App() {
         <AuthProvider>
           <GymProvider>
             <Routes>
-              <Route path="/" element={<LoginPage />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/" element={<DashboardPage />} />
               <Route path="/create-gym" element={<GymPage />} />
               <Route
                 path="/gym/:gymId/add-employee"
@@ -59,12 +58,11 @@ function App() {
                 element={<SalaryManagementPage />}
               />
               <Route path="/gym/:gymId/groups" element={<GroupList />} />
-              <Route path="/gym/:gymId/add-subscription/:memberId" element={<AddSubscriptionPage />} />
-
               <Route
-                path="/gym/:gymId/payment"
-                element={<PaymentPage />}
-              />{" "}
+                path="/gym/:gymId/add-subscription/:memberId"
+                element={<AddSubscriptionPage />}
+              />
+              <Route path="/gym/:gymId/payment" element={<PaymentPage />} />{" "}
               {/* Add the route for the PaymentPage */}
               <Route
                 path="/acknowledgement"
@@ -90,7 +88,10 @@ function App() {
                 element={<GroupAttendancePage />}
               />
               <Route path="/notifications" element={<Notifications />} />
-              <Route path="/gym/:gymId/staffs/manage-leaves" element={<ManageLeaves />} />
+              <Route
+                path="/gym/:gymId/staffs/manage-leaves"
+                element={<ManageLeaves />}
+              />
               <Route
                 path="/employee-details/:id"
                 element={<EmployeeDetails />}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Input from "../widgets/Input";
+import { MdDelete } from "react-icons/md";
 
 interface Group {
   _id?: string;
@@ -129,7 +130,7 @@ const AddGroupForm = ({ initialGroupData, onFormSubmit, onDelete }: AddGroupForm
             onClick={handleDelete}
             className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
           >
-            Delete Group
+            <MdDelete size={18}/> 
           </button>
         )}
       </div>

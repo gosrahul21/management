@@ -70,30 +70,49 @@ const GroupList = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {groups.map((group) => (
-            <div
-              key={group?._id}
-              onClick={() => navigate(`/group/profile/${group?._id}`)}
-              className=" bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start justify-between"
-            >
-              <div>
-                <h2 className="text-xl font-bold">{group?.groupName}</h2>
-                <p className="text-gray-400">
-                  Time: {group?.startTime} - {group?.endTime}
-                </p>
-                <p className="text-gray-400">Instructor: {"N/A"}</p>
-                <p className="text-gray-400">Total Members: {"N/A"}</p>
+        {groups ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {groups.map((group) => (
+              <div
+                key={group?._id}
+                onClick={() => navigate(`/group/profile/${group?._id}`)}
+                className=" bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start justify-between"
+              >
+                <div>
+                  <h2 className="text-xl font-bold">{group?.groupName}</h2>
+                  <p className="text-gray-400">
+                    Time: {group?.startTime} - {group?.endTime}
+                  </p>
+                  <p className="text-gray-400">Instructor: {"N/A"}</p>
+                  <p className="text-gray-400">Total Members: {"N/A"}</p>
+                </div>
+                <EditIcon
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    handleEditGroup(group);
+                  }}
+                />
               </div>
-              <EditIcon
-                onClick={(e: any) => {
-                  e.stopPropagation();
-                  handleEditGroup(group);
-                }}
-              />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className=" bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start justify-between"
+              >
+                <div>
+                  <div className="h-6 bg-gray-600 rounded mb-2 w-3/4"></div>
+                  <div className="h-4 bg-gray-600 rounded mb-2 w-1/2"></div>
+                  <div className="h-4 bg-gray-600 rounded mb-2 w-1/3"></div>
+                  <div className="h-4 bg-gray-600 rounded mb-2 w-1/4"></div>
+                </div>
+                <div className="h-6 w-6 bg-gray-600 rounded-full"></div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </GymPanel>
   );

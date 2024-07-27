@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext<{
   jwt: string | null;
@@ -20,14 +20,13 @@ export const AuthProvider = ({ children }: any) => {
     localStorage.getItem("refreshToken")
   );
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    console.log(!jwt, jwt);
-    if (!jwt) return;
+    if (!jwt) return navigate("/login");
     localStorage.setItem("jwt", jwt!);
     localStorage.setItem("refreshToken", refreshToken!);
-
-    if (jwt) navigate("/dashboard");
+    location.pathname === "/login" && navigate("/");
   }, [jwt, refreshToken]);
 
   const login = async (code: string) => {

@@ -10,7 +10,7 @@ import Group from "../types/Group";
 import UpdateGroupDTO from "../types/UpdateGroupDto";
 
 export const useGroup = () => {
-  const [groups, setGroups] = useState<Group[]>([]);
+  const [groups, setGroups] = useState<Group[]>();
   const [searchTerm, setSearchTerm] = useState("");
   const [initialGroupData, setInitialGroupData] = useState<Group>();
   const { gymId } = useParams();
@@ -33,9 +33,11 @@ export const useGroup = () => {
   }, [gymId]);
 
   const filterGroups = () => {
-    return groups.filter((group) =>
-      group.groupName?.toLowerCase().includes(searchTerm?.toLowerCase())
-    );
+    return groups
+      ? groups.filter((group) =>
+          group.groupName?.toLowerCase().includes(searchTerm?.toLowerCase())
+        )
+      : [];
   };
 
   const filteredGroups = filterGroups();
@@ -69,7 +71,6 @@ export const useGroup = () => {
     } catch (error) {
       console.log("error occured on creating group");
     }
-
     // Reset form fields after submission if needed
   };
 
@@ -81,7 +82,7 @@ export const useGroup = () => {
     try {
       const updatedGroup = await updateGroup(groupId, updateGroupDto);
       setGroups(
-        groups.map((group) => (group._id === groupId ? updatedGroup : group))
+        groups?.map((group) => (group._id === groupId ? updatedGroup : group))
       );
       closeAddEditForm();
     } catch (error) {
@@ -94,7 +95,7 @@ export const useGroup = () => {
     // Handle form submission logic here
     try {
       await deleteGroup(groupId);
-      setGroups(groups.filter((group) => group._id !== groupId));
+      setGroups(groups?.filter((group) => group._id !== groupId));
       closeAddEditForm();
     } catch (error) {
       console.log("error occured on creating group");
@@ -105,6 +106,7 @@ export const useGroup = () => {
   return {
     groups,
     createGymGroup,
+    filteredGroups,
     searchTerm,
     setSearchTerm,
     openAddEditForm,

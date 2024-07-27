@@ -44,7 +44,7 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
       <nav className="mt-10">
         <SideBarNav
           title="Dashboard"
-          to="/dashboard"
+          to="/"
           icon={DashboardIcon}
           onClick={toggleSidebar}
         />

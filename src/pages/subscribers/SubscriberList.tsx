@@ -6,7 +6,6 @@ import { useSubscribers } from "./hooks/userSubscribers";
 import SubscriberForm from "../../components/SubscriberForm";
 import Modal from "../../components/Modal";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGym } from "../../context/GymContext";
 
 const SubscriberList = () => {
   const {
