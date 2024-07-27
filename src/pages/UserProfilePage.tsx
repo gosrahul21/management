@@ -240,8 +240,8 @@ const UserProfile = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-800 p-6 rounded-lg shadow-md flex flex-col md:flex-row items-start">
               <img
-                src={`http://localhost:3000/image/${user.userId?.image}`} // Replace with actual user image if available
-                alt={`${user.userId.firstName}'s profile`}
+                src={`http://localhost:3000/image/${user.userId?.image}`}
+                alt={`${user.userId?.firstName}'s profile`}
                 className="w-32 h-32 rounded-full object-cover mr-4 mb-4 md:mb-0"
               />
               <div className="flex-1">
@@ -251,9 +251,6 @@ const UserProfile = () => {
                 <p className="text-gray-300">
                   Joined Date: {moment(user.createdAt).format("LL")}
                 </p>
-                {/* <p className="text-gray-300">
-                Membership Expiry Date: {moment(user.activeSubscriptions?.planId.expiryDate).format("LL")}
-              </p> */}
                 <div className="flex items-center gap-2">
                   <img
                     src={WhatsappIcon}
@@ -310,7 +307,6 @@ const UserProfile = () => {
                   </div>
                 )}
                 <p className="text-green-400">
-                  {/* {isExpired ? "Expired" : `${daysLeft} days left`} */}
                   {user?.activeSubscriptions
                     ? isExpired
                       ? "Expired"

@@ -3,7 +3,11 @@ import { useParams } from "react-router-dom";
 import { Member } from "../types/Subscribers";
 import { CreateMemberDTO } from "../types/CreateSubscribersDto";
 import { createMember } from "../../../service/susbcriber/createMember";
-import { getMembersByGym, updateMember } from "../../../service/subscriptions/addSubscription";
+import {
+  getMembersByGym,
+  updateMember,
+} from "../../../service/subscriptions/addSubscription";
+import { enqueueSnackbar } from "notistack";
 
 export const useSubscribers = () => {
   const [subscribers, setSubscribers] = useState<Member[]>([]);
@@ -33,6 +37,8 @@ export const useSubscribers = () => {
   const createGymSubscriber = async (body: any) => {
     try {
       const subscriber = await createMember({ gymId, ...body });
+      enqueueSnackbar("New member is added");
+
       setSubscribers([subscriber, ...subscribers]);
       closeAddEditForm();
     } catch (error) {
@@ -49,6 +55,7 @@ export const useSubscribers = () => {
         subscriberId,
         updateSubscriberDto
       );
+      enqueueSnackbar('Subscriber added successsfully');
       setSubscribers(
         subscribers.map((subscriber) =>
           subscriber._id === subscriberId ? updatedSubscriber : subscriber

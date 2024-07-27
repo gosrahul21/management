@@ -17,7 +17,6 @@ const getGroups = async (gymId: string) => {
 
 const createGroup = async (groupData: CreateGroupDTO): Promise<Group> => {
   try {
-    alert(groupData.gymId)
     const response = await apiClient.post(`/groups`, groupData);
     return response.data;
   } catch (error) {

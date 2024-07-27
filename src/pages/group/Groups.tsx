@@ -75,7 +75,9 @@ const GroupList = () => {
             {groups.map((group) => (
               <div
                 key={group?._id}
-                onClick={() => navigate(`/group/profile/${group?._id}`)}
+                onClick={() => {
+                  // navigate(`/group/profile/${group?._id}`);
+                }}
                 className=" bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start justify-between"
               >
                 <div>

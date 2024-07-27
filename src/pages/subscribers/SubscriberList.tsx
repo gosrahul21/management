@@ -29,11 +29,11 @@ const SubscriberList = () => {
   return (
     <GymPanel>
       <div className="p-6">
-        <div className="p-4 rounded-lg mb-6 flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Subscribers</h1>
+        <div className="p-4 rounded-lg mb-6 flex flex-col md:flex-row justify-between">
+          <h1 className="text-3xl font-bold mb-4 md:mb-0">Subscribers</h1>
           <button
             onClick={() => openAddEditForm()}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md"
           >
             Add Subscriber
           </button>
@@ -52,11 +52,11 @@ const SubscriberList = () => {
         </Modal>
 
         {/* Filter Section */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex">
+        <div className="flex flex-col md:flex-row   mb-6 space-y-4 md:space-y-0 md:space-x-4">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setFilter("all")}
-              className={`mx-2 px-4 py-2 rounded ${
+              className={`px-4 py-2 rounded ${
                 filter === "all" ? "bg-blue-600" : "bg-gray-700"
               } hover:bg-blue-700`}
             >
@@ -64,7 +64,7 @@ const SubscriberList = () => {
             </button>
             <button
               onClick={() => setFilter("subscribed")}
-              className={`mx-2 px-4 py-2 rounded ${
+              className={`px-4 py-2 rounded ${
                 filter === "subscribed" ? "bg-blue-600" : "bg-gray-700"
               } hover:bg-blue-700`}
             >
@@ -72,11 +72,19 @@ const SubscriberList = () => {
             </button>
             <button
               onClick={() => setFilter("expired")}
-              className={`mx-2 px-4 py-2 rounded ${
+              className={`px-4 py-2 rounded ${
                 filter === "expired" ? "bg-blue-600" : "bg-gray-700"
               } hover:bg-blue-700`}
             >
               Expired
+            </button>
+            <button
+              onClick={() => setFilter("expired")}
+              className={`px-4 py-2 rounded ${
+                filter === "expired" ? "bg-blue-600" : "bg-gray-700"
+              } hover:bg-blue-700`}
+            >
+              Expiring Soon
             </button>
           </div>
           <select
@@ -89,16 +97,16 @@ const SubscriberList = () => {
             <option value="Basic Membership">Basic Membership</option>
             <option value="Standard Membership">Standard Membership</option>
           </select>
-          <div className="flex items-center flex-1 px-6">
+          <div className="flex items-center w-full md:w-auto">
             <input
               type="text"
-              placeholder="Search by member name."
+              placeholder="Search by member name"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-gray-700 text-white p-2 rounded-l-md w-1/3 focus:outline-none"
+              className="bg-gray-700 text-white p-2 rounded-l-md w-full md:w-auto focus:outline-none"
             />
             <button className="bg-blue-600 text-white py-2 px-4 rounded-r-md hover:bg-blue-700">
-              <img src={SearchIcon} alt="Search Icon" />
+              <img src={SearchIcon} alt="Search Icon" className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -130,21 +138,21 @@ const SubscriberList = () => {
                     `/gym/${gymId}/subscriber/profile/${subscriber?._id}`
                   )
                 }
-                className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start"
+                className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex space-x-2  flex-row items-start"
               >
                 <img
-                  src={`http://localhost:3000/image/${subscriber.userId?.image}`}
+                  src={`http://localhost:3000/image/${subscriber?.userId?.image}`}
                   alt={` profile`}
-                  className="w-20 h-20 rounded-full mr-4 object-cover"
+                  className="w-20 h-20 rounded-full mb-4 md:mb-0 md:mr-4 object-cover"
                 />
-                <div>
+                <div className="flex-1">
                   <h2 className="text-xl font-bold">
-                    {subscriber.userId.firstName +
+                    {subscriber?.userId?.firstName +
                       " " +
-                      subscriber.userId.lastName}
+                      subscriber?.userId?.lastName}
                   </h2>
-                  <p className="text-gray-400">{subscriber.userId.email}</p>
-                  <p className="text-gray-400">{subscriber.userId.phoneNo}</p>
+                  <p className="text-gray-400">{subscriber?.userId?.email}</p>
+                  <p className="text-gray-400">{subscriber?.userId?.phoneNo}</p>
                   <p className="mt-2 text-gray-300">
                     Plan: {subscriber.activeSubscriptions?.planId?.planName}
                   </p>
@@ -153,7 +161,6 @@ const SubscriberList = () => {
                       isExpired ? "text-red-500" : "text-green-400"
                     }`}
                   >
-                    {/* {isExpired ? "Expired" : `${daysLeft} days left`} */}
                     {subscriber?.activeSubscriptions
                       ? isExpired
                         ? "Expired"
@@ -174,10 +181,13 @@ const SubscriberList = () => {
                     </button>
                   )}
                 </div>
-                <div className="flex-1 flex justify-end">
+                <div className="flex justify-end w-full md:w-auto">
                   <img
                     src={WhatsappIcon}
-                    onClick={() => sendMessageOnWhatsApp(subscriber)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      sendMessageOnWhatsApp(subscriber);
+                    }}
                     className="h-10 w-10 cursor-pointer"
                   />
                 </div>

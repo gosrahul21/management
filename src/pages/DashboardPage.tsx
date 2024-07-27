@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GymCard from "../components/GymCard";
 import AddIcon from "../assets/icons/add-icon.svg";
@@ -87,13 +87,13 @@ const DashboardPage = () => {
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-gray-700 text-gray-100 rounded-md shadow-lg z-50">
                 <Link
-                  to="/profile"
+                  to="/coming-soon"
                   className="block px-4 py-2 hover:bg-gray-600"
                 >
                   Profile
                 </Link>
                 <Link
-                  to="/settings"
+                  to="/coming-soon"
                   className="block px-4 py-2 hover:bg-gray-600"
                 >
                   Settings
@@ -146,37 +146,6 @@ const DashboardPage = () => {
             />
           ))}
 
-          {filteredGyms.map((gym) => (
-            <GymCard
-              onClick={() => navigate(`/gym/${gym._id}/dashboard`)}
-              key={gym._id}
-              gym={gym}
-            />
-          ))}
-
-          {filteredGyms.map((gym) => (
-            <GymCard
-              onClick={() => navigate(`/gym/${gym._id}/dashboard`)}
-              key={gym._id}
-              gym={gym}
-            />
-          ))}
-
-          {filteredGyms.map((gym) => (
-            <GymCard
-              onClick={() => navigate(`/gym/${gym._id}/dashboard`)}
-              key={gym._id}
-              gym={gym}
-            />
-          ))}
-
-          {filteredGyms.map((gym) => (
-            <GymCard
-              onClick={() => navigate(`/gym/${gym._id}/dashboard`)}
-              key={gym._id}
-              gym={gym}
-            />
-          ))}
         </section>
       </main>
     </div>

@@ -80,7 +80,7 @@ const GymDashboard = () => {
     cutout: "50%",
     plugins: {
       legend: {
-        display: true,
+        display: false,
         position: "bottom",
         color: "white",
       },
@@ -151,11 +151,45 @@ const GymDashboard = () => {
           </div>
 
           <div className="bg-gray-800 p-4 rounded-xl shadow-md">
-            <h2 className="text-2xl font-bold mb-2 text-center">Clients</h2>
-            <div className="h-[200px] w-[200px] mx-auto relative">
-              <Doughnut data={memberData} options={commonOptions} />
+            <h2 className="text-2xl font-bold mb-2 text-center">
+              Active Clients
+            </h2>
+            <div className="mx-auto  flex justify-center items-center flex-col">
+              <div className="h-[200px] w-[200px]">
+                <Doughnut
+                  data={memberData}
+                  height={"50%"}
+                  options={commonOptions}
+                />
+              </div>
+              <div className="py-1">
+                <div className="flex gap-2">
+                  <div className="h-4 w-10 bg-[#3399FF]"></div>
+                  <p className="text-bold">Active clients: {gymDetails.activeClients}</p>
+                </div>
+
+                <div className="flex gap-2">
+                  <div className="h-4 w-10 bg-[#CCCC66]"></div>
+                  <p>
+                    InActive Clients:{" "}
+                    {gymDetails.totalClients - gymDetails.activeClients}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
+
+          {/* <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
+            <FaUser className="text-4xl mr-4" />
+            <div>
+              <h2 className="text-2xl font-bold mb-2 text-center">
+                Active Clients
+              </h2>
+              <p className="text-4xl font-semibold text-center">
+                {gymDetails.activeClients}
+              </p>
+            </div>
+          </div> */}
 
           <div className="bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-center">
             <FaUser className="text-4xl mr-4" />
@@ -215,7 +249,6 @@ const GymDashboard = () => {
               </p>
             </div>
           </div>
-          
 
           <div className="bg-gray-800 p-4 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold mb-2 text-center">
@@ -225,9 +258,9 @@ const GymDashboard = () => {
               <Doughnut data={enquiryData} options={commonOptions} />
               <div className="absolute inset-0 flex items-center justify-center">
                 <p className="text-center">
-                  New: {gymDetails.newEnquiries}
+                  {/* New: {gymDetails.newEnquiries} */}
                   <br />
-                  Total: {gymDetails.totalEnquiries}
+                  {/* Total: {gymDetails.totalEnquiries} */}
                 </p>
               </div>
             </div>
@@ -240,12 +273,10 @@ const GymDashboard = () => {
                 New Enquiries
               </h2>
               <p className="text-4xl font-semibold text-center">
-                {gymDetails.newEnquiries}
+                {/* {gymDetails.newEnquiries} */}
               </p>
             </div>
           </div>
-
-
 
           {/* <div className="bg-gray-800 p-4 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold mb-2 text-center">

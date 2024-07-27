@@ -37,11 +37,11 @@ const SubscriptionList = () => {
             selectedSusbcription={selectedSubscription}
           />
         </Modal>
-        <div className="p-4 rounded-lg mb-6 flex justify-between items-center">
+        <div className="md:p-4 p-0 rounded-lg mb-6 flex flex-col md:flex-row space-y-2 md:space-y-0 justify-between md:items-center">
           <h1 className="text-3xl font-bold">Subscriptions</h1>
           <button
             onClick={() => openAddEditForm()}
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-2 md:py-2 md:px-4 rounded"
           >
             Add Subscription
           </button>
@@ -54,7 +54,7 @@ const SubscriptionList = () => {
             placeholder="Search by subscription name."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-gray-700 text-white p-2 rounded-l-md w-1/3 focus:outline-none"
+            className="bg-gray-700 text-white p-2 rounded-l-md w-full md:w-1/3 focus:outline-none"
           />
           <button className="bg-blue-600 text-white py-2 px-4 rounded-r-md hover:bg-blue-700">
             <img src={SearchIcon} alt="Search Icon" />
@@ -67,8 +67,8 @@ const SubscriptionList = () => {
             <div
               key={subscription?._id}
               className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start justify-between cursor-pointer"
-              onClick={() =>
-                navigate(`/subscription/profile/${subscription?._id}`)
+              onClick={() =>{}
+                // navigate(`/subscription/profile/${subscription?._id}`)
               }
             >
               <div>

@@ -8,6 +8,7 @@ import {
 } from "../../../service/group/groupService";
 import Group from "../types/Group";
 import UpdateGroupDTO from "../types/UpdateGroupDto";
+import { enqueueSnackbar } from "notistack";
 
 export const useGroup = () => {
   const [groups, setGroups] = useState<Group[]>();
@@ -67,6 +68,8 @@ export const useGroup = () => {
         ...body,
       });
       setGroups([group, ...groups]);
+      enqueueSnackbar("Group created successfully", { variant: "success" });
+
       closeAddEditForm();
     } catch (error) {
       console.log("error occured on creating group");
@@ -84,6 +87,7 @@ export const useGroup = () => {
       setGroups(
         groups?.map((group) => (group._id === groupId ? updatedGroup : group))
       );
+      enqueueSnackbar("Group has been updated", { variant: "success" });
       closeAddEditForm();
     } catch (error) {
       console.log("error occured on creating group");
@@ -95,6 +99,7 @@ export const useGroup = () => {
     // Handle form submission logic here
     try {
       await deleteGroup(groupId);
+      enqueueSnackbar("Group has been deleted");
       setGroups(groups?.filter((group) => group._id !== groupId));
       closeAddEditForm();
     } catch (error) {

@@ -7,6 +7,7 @@ import { createEmployee } from "../service/employees/createEmployeeService";
 import { checkUserExists } from "../service/employees/checkEmployeeExist";
 import { uploadImage } from "../service/upload/imageUpload";
 import { useGym } from "../context/GymContext";
+import { useNavigate } from "react-router-dom";
 
 const EmployeeForm = () => {
   const [name, setName] = useState("");
@@ -18,6 +19,7 @@ const EmployeeForm = () => {
   const [gender, setGender] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const {gym} = useGym();
+  const navigate = useNavigate();
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
@@ -63,7 +65,7 @@ const EmployeeForm = () => {
       };
 
       await createEmployee(newEmployee);
-      console.log("Employee Added:", newEmployee);
+      navigate(-1);
     } catch (error) {
       console.error("Error adding employee:", error);
     } finally {

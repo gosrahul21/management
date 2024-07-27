@@ -3,6 +3,7 @@ import { createGym } from '../service/gym/gymService';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { uploadImage } from '../service/upload/imageUpload';
+import { enqueueSnackbar } from 'notistack';
 
 const GymForm = () => {
   const [name, setName] = useState('');
@@ -50,8 +51,8 @@ const GymForm = () => {
 
     try {
       const response = await createGym(newGym);
-      console.log('Gym created successfully:', response);
-      navigate('/dashboard');
+      enqueueSnackbar('Gym created successfully',{variant: 'success'})
+      navigate('/');
       // Reset form fields or handle success response
     } catch (error) {
       console.error('Error creating gym:', error);

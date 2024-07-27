@@ -26,6 +26,8 @@ import EmployeeDetails from "./pages/EmployeeDetails";
 import { AuthProvider } from "./context/authContext";
 import { GymProvider } from "./context/GymContext";
 import AddSubscriptionPage from "./pages/subscribers/AddSubscripionPage";
+import ComingSoonPage from "./pages/ComingSoonPage";
+import { SnackbarProvider } from "notistack";
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
       <Router>
         <AuthProvider>
           <GymProvider>
+          <SnackbarProvider />
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/" element={<DashboardPage />} />
@@ -96,6 +99,7 @@ function App() {
                 path="/employee-details/:id"
                 element={<EmployeeDetails />}
               />
+              <Route path="/coming-soon" element={<ComingSoonPage />} />
             </Routes>
             {/* <CheckIn/> */}
           </GymProvider>

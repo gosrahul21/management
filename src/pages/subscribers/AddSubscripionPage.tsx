@@ -8,6 +8,7 @@ import { getGroups } from "../../service/group/groupService";
 import Group from "../group/types/Group";
 import SubscriptionPlan from "../../service/subscription-plan/types/SubscriptionPlan";
 import getSubscriptionPlans from "../../service/subscription-plan/getSubscriptionPlan";
+import { enqueueSnackbar } from "notistack";
 
 const AddSubscriptionPage = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -52,14 +53,14 @@ const AddSubscriptionPage = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await createSubscription({
+      await createSubscription({
         memberId: memberId!,
         groupId: selectedGroup?._id || "",
         planId: selectedPlan?._id || "",
         startDate,
       });
-      console.log("Subscription added:", response.data);
-      navigate(`/user/${userId}`);
+      enqueueSnackbar("New subscription added", { variant: "success" });
+      navigate(`/gym/${gymId}/subscribers`);
     } catch (error) {
       console.error("Error adding subscription:", error);
     } finally {
@@ -67,9 +68,9 @@ const AddSubscriptionPage = () => {
     }
   };
 
-  if (loading) {
-    return <Spinner />;
-  }
+  // if (loading) {
+  //   return <Spinner />;
+  // }
 
   return (
     <GymPanel>
@@ -103,7 +104,7 @@ const AddSubscriptionPage = () => {
                     key={plan._id}
                     value={plan._id}
                   >
-                    {plan.planName} 
+                    {plan.planName}
                   </option>
                 ))}
               </select>
@@ -133,7 +134,7 @@ const AddSubscriptionPage = () => {
                     key={group._id}
                     value={group._id}
                   >
-                    {group.groupName} 
+                    {group.groupName}
                   </option>
                 ))}
               </select>
@@ -175,7 +176,10 @@ const AddSubscriptionPage = () => {
                 {selectedGroup && (
                   <div className="mb-4 text-white">
                     <p className="font-bold">Timing</p>
-                    <p> {selectedGroup.startTime} - {selectedGroup.endTime}</p>
+                    <p>
+                      {" "}
+                      {selectedGroup.startTime} - {selectedGroup.endTime}
+                    </p>
                   </div>
                 )}
               </div>
