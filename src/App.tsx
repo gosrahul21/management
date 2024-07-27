@@ -31,7 +31,7 @@ import { SnackbarProvider } from "notistack";
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId="413773176963-f3r41461irvbjq00pboait6hd6aikf12.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT}>
       <Router>
         <AuthProvider>
           <GymProvider>

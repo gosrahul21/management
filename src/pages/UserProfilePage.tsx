@@ -240,7 +240,7 @@ const UserProfile = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-800 p-6 rounded-lg shadow-md flex flex-col md:flex-row items-start">
               <img
-                src={`http://localhost:3000/image/${user.userId?.image}`}
+                src={`${import.meta.env.VITE_BACKEND_URI}/image/${user.userId?.image}`}
                 alt={`${user.userId?.firstName}'s profile`}
                 className="w-32 h-32 rounded-full object-cover mr-4 mb-4 md:mb-0"
               />

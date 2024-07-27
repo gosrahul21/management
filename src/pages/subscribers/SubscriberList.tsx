@@ -140,8 +140,11 @@ const SubscriberList = () => {
                 }
                 className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex space-x-2  flex-row items-start"
               >
+
                 <img
-                  src={`http://localhost:3000/image/${subscriber?.userId?.image}`}
+                  src={`${import.meta.env.VITE_BACKEND_URI}/image/${
+                    subscriber?.userId?.image
+                  }`}
                   alt={` profile`}
                   className="w-20 h-20 rounded-full mb-4 md:mb-0 md:mr-4 object-cover"
                 />

@@ -37,7 +37,7 @@ const EmployeeList = () => {
     );
   };
 
-  const sendMessageOnWhatsApp = (user) => {
+  const sendMessageOnWhatsApp = (user: any) => {
     const phoneNumber = user.phone.replace(/[^0-9]/g, ""); // Ensure phone number is digits only
     const message = `Hello ${user.name},`;
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
@@ -85,14 +85,14 @@ const EmployeeList = () => {
 
         {/* Employees List */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredEmployees.map((employee) => (
+          {filteredEmployees.map((employee: any) => (
             <div
               key={employee._id}
               onClick={() => navigate(`/employee-details/${employee._id}`)}
               className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start"
             >
               <img
-                src={`http://localhost:3000/image/${employee.userId.image}`}
+                src={`${import.meta.env.VITE_BACKEND_URI}/image/${employee.userId.image}`}
                 alt={`${employee.name}'s profile`}
                 className="w-20 h-20 rounded-full mr-4 object-cover"
               />
