@@ -11,13 +11,13 @@ import { enqueueSnackbar } from "notistack";
 
 export const useSubscribers = () => {
   const [subscribers, setSubscribers] = useState<Member[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("all");
-  const [planFilter, setPlanFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState<any>("");
+  const [filter, setFilter] = useState<any>("all");
+  const [planFilter, setPlanFilter] = useState<any>("all");
   const [initialSubscriberData, setInitialSubscriberData] = useState<
     Member | undefined
   >(undefined);
-  const [isAddEditFormOpen, setIsAddEditFormOpen] = useState(false);
+  const [isAddEditFormOpen, setIsAddEditFormOpen] = useState<any>(false);
   const { gymId } = useParams<{ gymId: string }>();
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export const useSubscribers = () => {
         subscriberId,
         updateSubscriberDto
       );
-      enqueueSnackbar('Subscriber added successsfully');
+      enqueueSnackbar("Subscriber added successsfully");
       setSubscribers(
         subscribers.map((subscriber) =>
           subscriber._id === subscriberId ? updatedSubscriber : subscriber

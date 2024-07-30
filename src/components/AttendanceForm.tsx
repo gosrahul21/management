@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
-const AttendanceForm = ({ record, onSubmit }) => {
-  const [formData, setFormData] = useState(record || {
-    date: '',
-    time: '',
-    participants: [],
-  });
+const AttendanceForm = ({ record, onSubmit }: any) => {
+  const [formData, setFormData] = useState<any>(
+    record || {
+      date: "",
+      time: "",
+      participants: [],
+    }
+  );
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     // Handle form submission logic (e.g., API call)
     onSubmit();
@@ -21,7 +23,10 @@ const AttendanceForm = ({ record, onSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
+        <label
+          className="block text-gray-700 text-sm font-bold mb-2"
+          htmlFor="date"
+        >
           Date
         </label>
         <input
@@ -33,7 +38,10 @@ const AttendanceForm = ({ record, onSubmit }) => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="time">
+        <label
+          className="block text-gray-700 text-sm font-bold mb-2"
+          htmlFor="time"
+        >
           Time
         </label>
         <input
@@ -50,7 +58,7 @@ const AttendanceForm = ({ record, onSubmit }) => {
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          {record ? 'Update' : 'Add'} Attendance
+          {record ? "Update" : "Add"} Attendance
         </button>
       </div>
     </form>

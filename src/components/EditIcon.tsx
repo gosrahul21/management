@@ -1,7 +1,6 @@
-import React from 'react';
 import EditIconSvg from '../assets/icons/edit-icon.svg';
 
-const EditIcon = ({ onClick }) => {
+const EditIcon = ({ onClick }: any) => {
   return (
     <div
       onClick={onClick}

@@ -1,27 +1,44 @@
 import React, { useState } from 'react';
 
-const SalaryForm = ({ employee, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    baseSalary: employee ? employee.baseSalary : '',
-    bonus: employee ? employee.bonus : '',
-    deductions: employee ? employee.deductions : '',
+interface Employee {
+  baseSalary?: number;
+  bonus?: number;
+  deductions?: number;
+}
+
+interface SalaryFormProps {
+  employee?: Employee;
+  onSubmit: (formData: Employee) => void;
+}
+
+const SalaryForm: React.FC<SalaryFormProps> = ({ employee, onSubmit }) => {
+  const [formData, setFormData] = useState<Employee>({
+    baseSalary: employee ? employee.baseSalary : 0,
+    bonus: employee ? employee.bonus : 0,
+    deductions: employee ? employee.deductions : 0,
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: Number(value) });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic (e.g., API call)
     onSubmit(formData); // Passing form data to onSubmit function
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-gray-800 p-6 rounded-lg shadow-md"
+    >
       <div className="mb-4">
-        <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="baseSalary">
+        <label
+          className="block text-gray-300 text-sm font-bold mb-2"
+          htmlFor="baseSalary"
+        >
           Base Salary
         </label>
         <input
@@ -33,7 +50,10 @@ const SalaryForm = ({ employee, onSubmit }) => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="bonus">
+        <label
+          className="block text-gray-300 text-sm font-bold mb-2"
+          htmlFor="bonus"
+        >
           Bonus
         </label>
         <input
@@ -45,7 +65,10 @@ const SalaryForm = ({ employee, onSubmit }) => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-gray-300 text-sm font-bold mb-2" htmlFor="deductions">
+        <label
+          className="block text-gray-300 text-sm font-bold mb-2"
+          htmlFor="deductions"
+        >
           Deductions
         </label>
         <input
@@ -61,7 +84,7 @@ const SalaryForm = ({ employee, onSubmit }) => {
           type="submit"
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          {employee ? 'Update' : 'Add'} Salary
+          {employee ? "Update" : "Add"} Salary
         </button>
       </div>
     </form>

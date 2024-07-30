@@ -1,35 +1,35 @@
-import { useState } from 'react';
-import { createGym } from '../service/gym/gymService';
-import { useNavigate } from 'react-router-dom';
-import { useDropzone } from 'react-dropzone';
-import { uploadImage } from '../service/upload/imageUpload';
-import { enqueueSnackbar } from 'notistack';
+import { useState, ChangeEvent, FormEvent } from "react";
+import { createGym } from "../service/gym/gymService";
+import { useNavigate } from "react-router-dom";
+import { useDropzone } from "react-dropzone";
+import { uploadImage } from "../service/upload/imageUpload";
+import { enqueueSnackbar } from "notistack";
 
-const GymForm = () => {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [pincode, setPincode] = useState('');
-  const [state, setState] = useState('');
-  const [country, setCountry] = useState('');
-  const [facilities, setFacilities] = useState([]);
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [imageFile, setImageFile] = useState(null);
+const GymForm: React.FC = () => {
+  const [name, setName] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [pincode, setPincode] = useState<string>("");
+  const [state, setState] = useState<string>("");
+  const [country, setCountry] = useState<string>("");
+  const [facilities, setFacilities] = useState<string[]>([]);
+  const [phone, setPhone] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     let image = null;
     if (imageFile) {
       try {
         const uploadResponse = await uploadImage(imageFile);
-        image = uploadResponse._id; // Assuming your API returns the URL of the uploaded image
+        image = uploadResponse._id; // Assuming your API returns the ID of the uploaded image
       } catch (error) {
-        console.error('Error uploading image:', error);
-        // Handle error response
+        console.error("Error uploading image:", error);
+        enqueueSnackbar("Error uploading image", { variant: "error" });
         return;
       }
     }
@@ -46,31 +46,35 @@ const GymForm = () => {
         phone,
         email,
       },
-      image, // Include the image URL in the gym data
+      image, // Include the image ID in the gym data
     };
 
     try {
-      const response = await createGym(newGym);
-      enqueueSnackbar('Gym created successfully',{variant: 'success'})
-      navigate('/');
-      // Reset form fields or handle success response
+      await createGym(newGym);
+      enqueueSnackbar("Gym created successfully", { variant: "success" });
+      navigate("/");
     } catch (error) {
-      console.error('Error creating gym:', error);
-      // Handle error response
+      console.error("Error creating gym:", error);
+      enqueueSnackbar("Error creating gym", { variant: "error" });
     }
   };
 
-  const handleFacilitiesChange = (e) => {
-    const facilitiesArray = e.target.value.split(',').map((item: string) => item.trim());
+  const handleFacilitiesChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const facilitiesArray = e.target.value
+      .split(",")
+      .map((item: string) => item.trim());
     setFacilities(facilitiesArray);
   };
 
-  const onDrop = (acceptedFiles: any) => {
-    console.log(acceptedFiles[0])
+  const onDrop = (acceptedFiles: File[]) => {
+    console.log(acceptedFiles[0]);
     setImageFile(acceptedFiles[0]);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/*' });
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: "image/*",
+  } as any);
 
   return (
     <form
@@ -141,7 +145,7 @@ const GymForm = () => {
       <label className="block mb-2">Facilities (comma-separated)</label>
       <input
         type="text"
-        value={facilities.join(', ')}
+        value={facilities.join(", ")}
         onChange={handleFacilitiesChange}
         className="w-full p-2 bg-gray-700 border border-gray-600 rounded mb-4 text-white"
       />

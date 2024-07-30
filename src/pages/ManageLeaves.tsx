@@ -1,11 +1,24 @@
-import { useState, } from "react";
-import GymPanel from "../components/Gympanel";
+import { useState } from "react";
 import Modal from "../components/Modal";
 import LeaveForm from "../components/LeaveForm";
 import { FaEdit, FaSort } from "react-icons/fa";
 import Input from "../widgets/Input";
+import GymPanel from "../components/Gympanel";
 
-const sampleLeaves = [
+interface Leave {
+  id: number;
+  name: string;
+  startDate: string;
+  endDate: string;
+  type: string;
+}
+
+interface SortConfig {
+  key: keyof Leave | null;
+  direction: "ascending" | "descending";
+}
+
+const sampleLeaves: Leave[] = [
   {
     id: 1,
     name: "John Doe",
@@ -31,16 +44,16 @@ const sampleLeaves = [
 ];
 
 const ManageLeaves = () => {
-  const [leaves, setLeaves] = useState(sampleLeaves);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingLeave, setEditingLeave] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState({
+  const [leaves, setLeaves] = useState<Leave[]>(sampleLeaves);
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [editingLeave, setEditingLeave] = useState<Leave | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [sortConfig, setSortConfig] = useState<SortConfig>({
     key: null,
     direction: "ascending",
   });
 
-  const openForm = (leave) => {
+  const openForm = (leave: Leave | null) => {
     setEditingLeave(leave);
     setIsFormOpen(true);
   };
@@ -50,7 +63,7 @@ const ManageLeaves = () => {
     setIsFormOpen(false);
   };
 
-  const handleSaveLeave = (leave) => {
+  const handleSaveLeave = (leave: Leave) => {
     if (editingLeave) {
       setLeaves(leaves.map((l) => (l.id === leave.id ? leave : l)));
     } else {
@@ -59,7 +72,7 @@ const ManageLeaves = () => {
     closeForm();
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
@@ -69,8 +82,8 @@ const ManageLeaves = () => {
       leave.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSort = (key) => {
-    let direction = "ascending";
+  const handleSort = (key: keyof Leave) => {
+    let direction: "ascending" | "descending" = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
     }
@@ -78,6 +91,7 @@ const ManageLeaves = () => {
   };
 
   const sortedLeaves = filteredLeaves.sort((a, b) => {
+    if (!sortConfig.key) return 0;
     if (a[sortConfig.key] < b[sortConfig.key]) {
       return sortConfig.direction === "ascending" ? -1 : 1;
     }
@@ -95,7 +109,7 @@ const ManageLeaves = () => {
           onClose={closeForm}
           title={editingLeave ? "Edit Leave" : "Add Leave"}
         >
-          <LeaveForm leave={editingLeave} onSave={handleSaveLeave} />
+          <LeaveForm leave={editingLeave as any} onSave={handleSaveLeave as any} />
         </Modal>
         <div className="p-4 rounded-lg mb-6 flex justify-between items-center">
           <h1 className="text-3xl font-bold">Manage Leaves</h1>
@@ -109,7 +123,7 @@ const ManageLeaves = () => {
 
         <div className="mb-6">
           <Input
-            id="searchTern"
+            id="searchTerm"
             type="text"
             placeholder="Search by name or type..."
             value={searchTerm}

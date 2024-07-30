@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Doughnut } from "react-chartjs-2";
 import { ArcElement, Chart, Tooltip, Legend } from "chart.js";
 import { chartColors } from "../utils/color";
@@ -18,7 +18,6 @@ import { getTotalEnquiries } from "../service/enquiries/getTotalEnquiries";
 Chart.register(ArcElement, Legend, Tooltip);
 
 const GymDashboard = () => {
-  const navigate = useNavigate();
   const [gymDetails, setGymDetails] = useState<any>({
     totalClients: 500,
     activeClients: 350,
@@ -122,17 +121,17 @@ const GymDashboard = () => {
     ],
   };
 
-  const revenueExpenseData = {
-    labels: ["Revenue", "Expenses"],
-    datasets: [
-      {
-        data: [gymDetails.revenueThisMonth, gymDetails.expensesThisMonth],
-        backgroundColor: ["#4CAF50", "#FF5252"],
-        hoverBackgroundColor: ["#4CAF50", "#FF5252"],
-        borderWidth: 0,
-      },
-    ],
-  };
+  // const revenueExpenseData = {
+  //   labels: ["Revenue", "Expenses"],
+  //   datasets: [
+  //     {
+  //       data: [gymDetails.revenueThisMonth, gymDetails.expensesThisMonth],
+  //       backgroundColor: ["#4CAF50", "#FF5252"],
+  //       hoverBackgroundColor: ["#4CAF50", "#FF5252"],
+  //       borderWidth: 0,
+  //     },
+  //   ],
+  // };
 
   return (
     <GymPanel>
@@ -159,7 +158,7 @@ const GymDashboard = () => {
                 <Doughnut
                   data={memberData}
                   height={"50%"}
-                  options={commonOptions}
+                  options={commonOptions as any}
                 />
               </div>
               <div className="py-1">
@@ -255,7 +254,7 @@ const GymDashboard = () => {
               Total Enquiries
             </h2>
             <div className="h-[200px] w-[200px] mx-auto relative">
-              <Doughnut data={enquiryData} options={commonOptions} />
+              <Doughnut data={enquiryData} options={commonOptions as any} />
               <div className="absolute inset-0 flex items-center justify-center">
                 <p className="text-center">
                   {/* New: {gymDetails.newEnquiries} */}

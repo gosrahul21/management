@@ -1,4 +1,3 @@
-import React from 'react';
 import moment from 'moment';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement } from 'chart.js';
 import { Line } from 'react-chartjs-2';
@@ -12,7 +11,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 
 const EmployeeDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const employee = employees.find(emp => emp.id === parseInt(id))!;
+  const employee = employees.find(emp => emp.id === parseInt(id!))!;
   
   // Mock data for visualizations
   const attendanceData = {

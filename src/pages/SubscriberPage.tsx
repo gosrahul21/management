@@ -5,7 +5,7 @@ const SubscriberPage = () => {
   return (
     <GymPanel>
       <div className='flex justify-center mt-10'>
-        <SubscriberForm />
+        <SubscriberForm  onAddSubscriberClick={()=>{}}/>
       </div>
     </GymPanel>
   );

@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import moment from 'moment';
-import Sidebar from '../components/Sidebar';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import moment from "moment";
 
 const Attendance = () => {
-  const [userId, setUserId] = useState('');
-  const [userName, setUserName] = useState('');
-  const [userType, setUserType] = useState('staff');
-  const [attendances, setAttendances] = useState([]);
+  const [userId, setUserId] = useState<any>("");
+  const [userName, setUserName] = useState<any>("");
+  const [userType, setUserType] = useState<any>("staff");
+  const [attendances, setAttendances] = useState<any>([]);
 
   const fetchAttendances = async () => {
-    const response = await axios.get('http://localhost:5000/api/attendance');
+    const response = await axios.get("http://localhost:5000/api/attendance");
     setAttendances(response.data);
   };
 
@@ -19,19 +18,19 @@ const Attendance = () => {
   }, []);
 
   const handleAttendance = async () => {
-    const response = await axios.post('http://localhost:5000/api/attendance', {
+    const response = await axios.post("http://localhost:5000/api/attendance", {
       userId,
       userName,
       userType,
     });
     setAttendances([response.data, ...attendances]);
-    setUserId('');
-    setUserName('');
+    setUserId("");
+    setUserName("");
   };
 
   return (
     <div className="flex">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 bg-gray-900 text-white min-h-screen p-6">
         <header className="bg-gray-800 p-4 rounded-lg mb-6">
           <h1 className="text-3xl font-bold">Mark Attendance</h1>
@@ -87,11 +86,13 @@ const Attendance = () => {
               </tr>
             </thead>
             <tbody>
-              {attendances.map((attendance) => (
+              {attendances.map((attendance: any) => (
                 <tr key={attendance._id} className="hover:bg-gray-700">
                   <td className="px-4 py-2">{attendance.userName}</td>
                   <td className="px-4 py-2">{attendance.userType}</td>
-                  <td className="px-4 py-2">{moment(attendance.date).format('LL')}</td>
+                  <td className="px-4 py-2">
+                    {moment(attendance.date).format("LL")}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -1,9 +1,8 @@
-import React from 'react';
 import { Line } from 'react-chartjs-2';
 
-const AttendanceTrends = ({ records }) => {
-  const dates = records.map(record => record.date);
-  const attendanceCounts = records.map(record => record.participants.length);
+const AttendanceTrends = ({ records }: any) => {
+  const dates = records.map((record: any) => record.date);
+  const attendanceCounts = records.map((record: any) => record.participants.length);
 
   const data = {
     labels: dates,

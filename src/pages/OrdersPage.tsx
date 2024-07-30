@@ -1,18 +1,20 @@
-import { useState } from 'react';
-import moment from 'moment';
-import GymPanel from '../components/Gympanel';
+import { useState } from "react";
+import moment from "moment";
+import GymPanel from "../components/Gympanel";
 
 const OrdersPage = () => {
-  const [filter, setFilter] = useState('all');
-  const [orders] = useState([
-    { id: 'ORD001', date: '2023-06-10', status: 'pending', total: 250.00 },
-    { id: 'ORD002', date: '2023-06-12', status: 'completed', total: 150.00 },
-    { id: 'ORD003', date: '2023-06-14', status: 'canceled', total: 100.00 },
-    { id: 'ORD004', date: '2023-06-16', status: 'completed', total: 300.00 },
-    { id: 'ORD005', date: '2023-06-18', status: 'pending', total: 200.00 }
+  const [filter, setFilter] = useState<any>("all");
+  const [orders] = useState<any>([
+    { id: "ORD001", date: "2023-06-10", status: "pending", total: 250.0 },
+    { id: "ORD002", date: "2023-06-12", status: "completed", total: 150.0 },
+    { id: "ORD003", date: "2023-06-14", status: "canceled", total: 100.0 },
+    { id: "ORD004", date: "2023-06-16", status: "completed", total: 300.0 },
+    { id: "ORD005", date: "2023-06-18", status: "pending", total: 200.0 },
   ]);
 
-  const filteredOrders = orders.filter(order => filter === 'all' || order.status === filter);
+  const filteredOrders = orders.filter(
+    (order: any) => filter === "all" || order.status === filter
+  );
 
   return (
     <GymPanel>
@@ -24,26 +26,34 @@ const OrdersPage = () => {
       <div className="flex justify-between mb-6 px-10">
         <div className="flex">
           <button
-            onClick={() => setFilter('all')}
-            className={`mx-2 px-4 py-2 rounded ${filter === 'all' ? 'bg-blue-600' : 'bg-gray-700'} hover:bg-blue-700`}
+            onClick={() => setFilter("all")}
+            className={`mx-2 px-4 py-2 rounded ${
+              filter === "all" ? "bg-blue-600" : "bg-gray-700"
+            } hover:bg-blue-700`}
           >
             All
           </button>
           <button
-            onClick={() => setFilter('pending')}
-            className={`mx-2 px-4 py-2 rounded ${filter === 'pending' ? 'bg-blue-600' : 'bg-gray-700'} hover:bg-blue-700`}
+            onClick={() => setFilter("pending")}
+            className={`mx-2 px-4 py-2 rounded ${
+              filter === "pending" ? "bg-blue-600" : "bg-gray-700"
+            } hover:bg-blue-700`}
           >
             Pending
           </button>
           <button
-            onClick={() => setFilter('completed')}
-            className={`mx-2 px-4 py-2 rounded ${filter === 'completed' ? 'bg-blue-600' : 'bg-gray-700'} hover:bg-blue-700`}
+            onClick={() => setFilter("completed")}
+            className={`mx-2 px-4 py-2 rounded ${
+              filter === "completed" ? "bg-blue-600" : "bg-gray-700"
+            } hover:bg-blue-700`}
           >
             Completed
           </button>
           <button
-            onClick={() => setFilter('canceled')}
-            className={`mx-2 px-4 py-2 rounded ${filter === 'canceled' ? 'bg-blue-600' : 'bg-gray-700'} hover:bg-blue-700`}
+            onClick={() => setFilter("canceled")}
+            className={`mx-2 px-4 py-2 rounded ${
+              filter === "canceled" ? "bg-blue-600" : "bg-gray-700"
+            } hover:bg-blue-700`}
           >
             Canceled
           </button>
@@ -63,10 +73,13 @@ const OrdersPage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredOrders.map(order => (
-              <tr key={order.id} className="border-t border-gray-700 text-center hover:bg-gray-600">
+            {filteredOrders.map((order: any) => (
+              <tr
+                key={order.id}
+                className="border-t border-gray-700 text-center hover:bg-gray-600"
+              >
                 <td className="py-2 px-4">{order.id}</td>
-                <td className="py-2 px-4">{moment(order.date).format('LL')}</td>
+                <td className="py-2 px-4">{moment(order.date).format("LL")}</td>
                 <td className="py-2 px-4 capitalize">{order.status}</td>
                 <td className="py-2 px-4">${order.total.toFixed(2)}</td>
                 <td className="py-2 px-4">

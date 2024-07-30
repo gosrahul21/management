@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
 const CheckInKiosk = () => {
-  const [memberId, setMemberId] = useState('');
-  const [message, setMessage] = useState('');
+  const [memberId, setMemberId] = useState<any>("");
+  const [message, setMessage] = useState<any>("");
 
   const handleCheckIn = async () => {
     // Replace with your API endpoint
-    const response = await fetch('/api/check-in', {
-      method: 'POST',
+    const response = await fetch("/api/check-in", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ memberId }),
     });
 
     if (response.ok) {
-      setMessage('Check-in successful');
+      setMessage("Check-in successful");
     } else {
-      setMessage('Check-in failed');
+      setMessage("Check-in failed");
     }
   };
 

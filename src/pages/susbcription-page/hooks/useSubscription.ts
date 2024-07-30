@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SubscriptionPlan from "../../../service/subscription-plan/types/SubscriptionPlan";
 import getSubscriptionPlans from "../../../service/subscription-plan/getSubscriptionPlan";
 import createSubscriptionPlan from "../../../service/subscription-plan/createSubscriptionPlan";
@@ -8,8 +8,8 @@ import deleteSubscriptionPlan from "../../../service/subscription-plan/deleteSub
 
 const useSubscription = () => {
   const [subscriptions, setSubscriptions] = useState<SubscriptionPlan[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isAddEditFormOpen, setIsAddEditFormOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<any>("");
+  const [isAddEditFormOpen, setIsAddEditFormOpen] = useState<any>(false);
   const [selectedSubscription, setSelectedSubscription] =
     useState<SubscriptionPlan>();
   const { gymId } = useParams();

@@ -1,6 +1,18 @@
 import React from 'react';
 
-const Revenue = ({ data, viewMode }) => {
+interface RevenueItem {
+  id: number;
+  description: string;
+  amount: number;
+  date: string;
+}
+
+interface RevenueProps {
+  data: RevenueItem[];
+  viewMode: string;
+}
+
+const Revenue: React.FC<RevenueProps> = ({ data, viewMode }) => {
   const totalRevenue = data.reduce((acc, item) => acc + item.amount, 0);
 
   return (

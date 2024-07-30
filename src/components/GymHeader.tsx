@@ -1,17 +1,16 @@
-import { Link } from "react-router-dom";
 import MenuIcon from "../assets/icons/menu-icon.svg";
 import CloseIcon from "../assets/icons/close-icon.svg";
-
 import { useEffect, useRef, useState } from "react";
 import Sidebar from "./Sidebar";
 import { useGym } from "../context/GymContext";
 
-const GymHeader = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const sidebarRef = useRef({});
-  const {gym} = useGym()
+const GymHeader: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const sidebarRef = useRef<HTMLDivElement>(null); // Use HTMLDivElement as the ref type
+  const { gym } = useGym();
+
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(prev => !prev);
   };
 
   const openSidebar = () => {
@@ -23,18 +22,16 @@ const GymHeader = () => {
   };
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       if (e.clientX > window.innerWidth - 20) {
         openSidebar();
-      }
-      // console.log(sidebarRef.current.offsetWidth)
-      if (e.clientX < window.innerWidth - sidebarRef.current.offsetWidth) {
+      } else if (e.clientX < window.innerWidth - (sidebarRef.current?.offsetWidth || 0)) {
         closeSidebar();
       }
     };
 
-    const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         closeSidebar();
       }
     };
@@ -51,10 +48,12 @@ const GymHeader = () => {
   return (
     <header className="bg-gray-800 z-100 p-4 sticky top-0 shadow-lg">
       <Sidebar ref={sidebarRef} isOpen={isOpen} toggleSidebar={toggleSidebar} />
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">{gym?.name}</h1>
-          <p className="text-lg">{gym?.address}, {gym?.city}</p>
+          <p className="text-lg">
+            {gym?.address}, {gym?.city}
+          </p>
         </div>
         <div className="flex items-center">
           <div className="relative dropdown">
@@ -66,10 +65,10 @@ const GymHeader = () => {
               }}
             >
               {isOpen ? (
-                <img src={CloseIcon} className="h-6 w-6 object-contain" />
+                <img src={CloseIcon} className="h-6 w-6 object-contain" alt="Close menu" />
               ) : (
-                <img src={MenuIcon} className="h-6 w-6 object-contain" />
-              )}{" "}
+                <img src={MenuIcon} className="h-6 w-6 object-contain" alt="Open menu" />
+              )}
             </button>
           </div>
         </div>

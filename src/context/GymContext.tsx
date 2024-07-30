@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { getGymDetails } from "../service/gym/gymService";
 
@@ -11,7 +11,7 @@ const GymContext = createContext<{
 });
 
 export const GymProvider = ({ children }: any) => {
-  const [gym, setGym] = useState(null);
+  const [gym, setGym] = useState<any>(null);
   const location = useLocation();
   const params = useParams();
 

@@ -1,6 +1,6 @@
 // src/components/Expenses.js
-import React, { useState, useEffect } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { useState, useEffect } from "react";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,7 +9,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -21,12 +21,12 @@ ChartJS.register(
 );
 
 const mockExpenseData = [
-  { month: 'January', expense: 3000 },
-  { month: 'February', expense: 3500 },
-  { month: 'March', expense: 4000 },
-  { month: 'April', expense: 4500 },
-  { month: 'May', expense: 5000 },
-  { month: 'June', expense: 5500 },
+  { month: "January", expense: 3000 },
+  { month: "February", expense: 3500 },
+  { month: "March", expense: 4000 },
+  { month: "April", expense: 4500 },
+  { month: "May", expense: 5000 },
+  { month: "June", expense: 5500 },
 ];
 
 const Expenses = () => {
@@ -34,13 +34,13 @@ const Expenses = () => {
 
   useEffect(() => {
     const chartData = {
-      labels: mockExpenseData.map(item => item.month),
+      labels: mockExpenseData.map((item) => item.month),
       datasets: [
         {
-          label: 'Expenses',
-          data: mockExpenseData.map(item => item.expense),
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgb(255, 99, 132)',
+          label: "Expenses",
+          data: mockExpenseData.map((item) => item.expense),
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgb(255, 99, 132)",
           borderWidth: 1,
         },
       ],

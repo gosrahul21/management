@@ -1,6 +1,18 @@
 import React from 'react';
 
-const Expense = ({ data, viewMode }) => {
+interface ExpenseItem {
+  id: number;
+  description: string;
+  amount: number;
+  date: string;
+}
+
+interface ExpenseProps {
+  data: ExpenseItem[];
+  viewMode: "summary" | "detailed";
+}
+
+const Expense: React.FC<ExpenseProps> = ({ data, viewMode }) => {
   const totalExpense = data.reduce((acc, item) => acc + item.amount, 0);
 
   return (

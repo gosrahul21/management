@@ -17,7 +17,7 @@ export const fetchGyms = async () => {
   }
 };
 
-export const createGym = async (gymData) => {
+export const createGym = async (gymData: any) => {
   try {
     const response = await apiClient.post("/gyms", gymData);
     return response.data;

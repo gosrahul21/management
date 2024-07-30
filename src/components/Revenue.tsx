@@ -1,6 +1,6 @@
 // src/components/Revenue.js
 import { useState, useEffect } from 'react';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -50,14 +50,6 @@ const Revenue = () => {
     setData(chartData);
   }, []);
 
-    // Simulated revenue data (replace with actual data fetching)
-    const revenueData = [
-      { id: 1, name: 'Basic Membership', amount: 5000 },
-      { id: 2, name: 'Premium Membership', amount: 8000 },
-      { id: 3, name: 'Personal Training', amount: 2500 },
-      { id: 4, name: 'Merchandise Sales', amount: 1200 },
-      // Add more items as needed
-    ];
   
 
   return (

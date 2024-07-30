@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import GymCard from "../components/GymCard";
 import AddIcon from "../assets/icons/add-icon.svg";
@@ -7,14 +7,20 @@ import SearchIcon from "../assets/icons/search-icon.svg";
 import { fetchGyms } from "../service/gym/gymService";
 import { useAuth } from "../context/authContext";
 
+interface Gym {
+  _id: string;
+  name: string;
+  // Add other properties as needed
+}
+
 const DashboardPage = () => {
-  const [gyms, setGyms] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [showHeader, setShowHeader] = useState(true);
+  const [gyms, setGyms] = useState<Gym[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [showHeader, setShowHeader] = useState<boolean>(true);
   const navigate = useNavigate();
-  const dropdownRef = useRef(null);
-  const prevScrollY = useRef(0);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const prevScrollY = useRef<number>(0);
   const { logout } = useAuth();
 
   useEffect(() => {
@@ -51,8 +57,8 @@ const DashboardPage = () => {
   }, []);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
     };
@@ -80,7 +86,7 @@ const DashboardPage = () => {
             <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               <Avatar
                 src="https://via.placeholder.com/150"
-                alt="User Avatarrar"
+                alt="User Avatar"
                 size="50px"
               />
             </button>
@@ -120,7 +126,7 @@ const DashboardPage = () => {
               type="text"
               placeholder="Search by gym name..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               className="bg-gray-700 text-white p-2 rounded-l-md w-1/3 focus:outline-none"
             />
             <button className="bg-blue-600 text-white py-2 px-4 rounded-r-md hover:bg-blue-700">
@@ -145,7 +151,6 @@ const DashboardPage = () => {
               gym={gym}
             />
           ))}
-
         </section>
       </main>
     </div>

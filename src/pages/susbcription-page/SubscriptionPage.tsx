@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import GymPanel from "../../components/Gympanel";
 import SearchIcon from "../../assets/icons/search-icon.svg";
 // import Subscriptions from '../config/subscriptions'; // Replace with actual subscription data import
@@ -8,7 +7,6 @@ import EditIcon from "../../components/EditIcon"; // Import EditIcon component
 import useSubscription from "./hooks/useSubscription";
 
 const SubscriptionList = () => {
-  const navigate = useNavigate();
   const {
     subscriptions,
     isAddEditFormOpen,
@@ -34,7 +32,7 @@ const SubscriptionList = () => {
           <SubscriptionForm
             onSubmit={handleEditSubscription}
             onDelete={deleteSubscription}
-            selectedSusbcription={selectedSubscription}
+            selectedSubscription={selectedSubscription as any}
           />
         </Modal>
         <div className="md:p-4 p-0 rounded-lg mb-6 flex flex-col md:flex-row space-y-2 md:space-y-0 justify-between md:items-center">

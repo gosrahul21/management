@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import { NavLink } from "react-router-dom";
 import { useGym } from "../context/GymContext";
 import DashboardIcon from "../assets/icons/dashboard.svg";
@@ -11,10 +11,15 @@ import ShopIcon from "../assets/icons/shop-icon.svg";
 import SalaryIcon from "../assets/icons/salary-icon.svg";
 import NotificationIcon from "../assets/icons/notification.svg";
 
-const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
+interface SidebarProps {
+  isOpen: boolean;
+  toggleSidebar: () => void;
+}
+
+const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ isOpen, toggleSidebar }, ref) => {
   const { gym } = useGym();
 
-  const SideBarNav = ({ title, to, icon, onClick }) => {
+  const SideBarNav = ({ title, to, icon, onClick }: { title: string; to: string; icon: string; onClick?: () => void }) => {
     return (
       <NavLink
         to={to}
@@ -71,7 +76,7 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
             onClick={toggleSidebar}
           />
           <SideBarNav
-            title="Memberships Plan"
+            title="Membership Plan"
             to={`/gym/${gym?._id}/subscription`}
             icon={MembershipPlanIcon}
             onClick={toggleSidebar}
@@ -79,7 +84,7 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
         </div>
         <div className="mt-2">
           <h2 className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase">
-            Staffs
+            Staff
           </h2>
           <SideBarNav
             title="Employees"
@@ -139,5 +144,7 @@ const Sidebar = forwardRef(({ isOpen, toggleSidebar }, ref) => {
     </div>
   );
 });
+
+Sidebar.displayName = 'Sidebar'; // Added to display proper name in React DevTools
 
 export default Sidebar;

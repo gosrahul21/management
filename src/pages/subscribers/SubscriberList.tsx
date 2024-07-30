@@ -48,7 +48,7 @@ const SubscriberList = () => {
               : "Add Subscriber"
           }
         >
-          <SubscriberForm onAddSusbcriberClick={createGymSubscriber} />
+          <SubscriberForm onAddSubscriberClick={createGymSubscriber} />
         </Modal>
 
         {/* Filter Section */}
@@ -140,7 +140,6 @@ const SubscriberList = () => {
                 }
                 className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex space-x-2  flex-row items-start"
               >
-
                 <img
                   src={`${import.meta.env.VITE_BACKEND_URI}/image/${
                     subscriber?.userId?.image

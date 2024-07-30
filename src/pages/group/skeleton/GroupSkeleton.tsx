@@ -1,15 +1,11 @@
-import { useNavigate } from "react-router-dom";
 import { useGroup } from "../hooks/useGroup";
-import Group from "../types/Group";
 import AddGroupForm from "../../../components/AddGroupForm";
 import Modal from "../../../components/Modal";
 import GymPanel from "../../../components/Gympanel";
-
 import SearchIcon from "../../../assets/icons/search-icon.svg";
 
 const GroupListSkeleton = () => {
   const {
-    groups,
     isAddEditFormOpen,
     handleEditExpense,
     createGymGroup,
@@ -21,11 +17,6 @@ const GroupListSkeleton = () => {
     updateGymGroup,
   } = useGroup();
 
-  const navigate = useNavigate();
-
-  const handleEditGroup = (group: Group) => {
-    openAddEditForm(group);
-  };
 
   return (
     <GymPanel>

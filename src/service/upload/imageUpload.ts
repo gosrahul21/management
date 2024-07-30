@@ -2,7 +2,7 @@
 
 import apiClient from "../apiClient";
 
-export const uploadImage = async (imageFile: string) => {
+export const uploadImage = async (imageFile: File) => {
   const formData = new FormData();
   formData.append('file', imageFile);
 

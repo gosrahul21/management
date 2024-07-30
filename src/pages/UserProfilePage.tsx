@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import moment from "moment";
 import { Bar, Line } from "react-chartjs-2";
 import {
@@ -18,7 +18,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import WhatsappIcon from "../assets/icons/whatsapp-icon.svg";
 import { FcPhone } from "react-icons/fc";
 import { getMemberById } from "../service/susbcriber/getmember";
-import { Spinner } from "../widgets/Spinner";
 
 ChartJS.register(
   CategoryScale,
@@ -34,7 +33,7 @@ ChartJS.register(
 const UserProfile = () => {
   const { id, gymId } = useParams();
   const [user, setUser] = useState<any>(null);
-  const [fetching, setFetching] = useState(true);
+  const [fetching, setFetching] = useState<any>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -168,7 +167,6 @@ const UserProfile = () => {
   const endDate = moment(new Date(startDate)).add(durationInDays, "days");
   const daysLeft = endDate.diff(moment(), "days");
 
-
   const isExpired = daysLeft < 0;
 
   return (
@@ -240,7 +238,9 @@ const UserProfile = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-800 p-6 rounded-lg shadow-md flex flex-col md:flex-row items-start">
               <img
-                src={`${import.meta.env.VITE_BACKEND_URI}/image/${user.userId?.image}`}
+                src={`${import.meta.env.VITE_BACKEND_URI}/image/${
+                  user.userId?.image
+                }`}
                 alt={`${user.userId?.firstName}'s profile`}
                 className="w-32 h-32 rounded-full object-cover mr-4 mb-4 md:mb-0"
               />

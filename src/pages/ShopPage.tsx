@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import GymPanel from "../components/Gympanel";
 import SearchIcon from "../assets/icons/search-icon.svg";
 import EditIcon from "../assets/icons/edit-icon.svg"; // Assuming you have an edit icon
@@ -7,11 +6,10 @@ import Modal from "../components/Modal";
 import ProductForm from "../components/ProductForm"; // Form to add/edit products
 
 const ShopPage = () => {
-  const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const navigate = useNavigate();
+  const [products, setProducts] = useState<any>([]);
+  const [searchTerm, setSearchTerm] = useState<any>("");
+  const [isFormOpen, setIsFormOpen] = useState<any>(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   useEffect(() => {
     // Simulated fetch for product data (replace with actual API call)
@@ -57,7 +55,7 @@ const ShopPage = () => {
   }, []);
 
   const filterProducts = () => {
-    return products.filter((product) =>
+    return products.filter((product: any) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
@@ -67,11 +65,11 @@ const ShopPage = () => {
     setIsFormOpen(true);
   };
 
-  const closeForm = (updatedProduct = null) => {
+  const closeForm = (updatedProduct: any = null) => {
     if (updatedProduct) {
-      setProducts((prevProducts) => {
+      setProducts((prevProducts: any) => {
         if (updatedProduct.id) {
-          return prevProducts.map((p) =>
+          return prevProducts.map((p: any) =>
             p.id === updatedProduct.id ? updatedProduct : p
           );
         } else {
@@ -122,7 +120,7 @@ const ShopPage = () => {
 
         {/* Products List */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filterProducts().map((product) => (
+          {filterProducts().map((product: any) => (
             <div
               key={product.id}
               className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 -z-5"

@@ -1,39 +1,40 @@
-import React, { useState, useEffect } from "react";
+// SubscriptionForm.tsx
+import { useState, useEffect } from "react";
 import Input from "../widgets/Input"; // Assume you have an Input component
 import { Spinner } from "../widgets/Spinner"; // Assume you have a Spinner component
 import { useGym } from "../context/GymContext";
 import { getGroups } from "../service/group/groupService";
-import SubscriptionPlan from "../service/subscription-plan/types/SubscriptionPlan";
-import Group from "../pages/group/types/Group";
 import { User } from "../pages/users/types/User";
 import getSubscriptionPlans from "../service/subscription-plan/getSubscriptionPlan";
 import { useDropzone } from "react-dropzone";
 import { uploadImage } from "../service/upload/imageUpload";
+import SubscriptionPlan from "../service/subscription-plan/types/SubscriptionPlan";
+import Group from "../pages/group/types/Group";
 
-const SubscriptionForm = ({ onAddSusbcriberClick }: any) => {
-  const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [selectedPlan, setSelectedPlan] = useState<string>("");
-  const [selectedGroup, setSelectedGroup] = useState<string>("");
+interface SubscriptionFormProps {
+  onAddSubscriberClick: (user: any) => void;
+}
+
+const SubscriptionForm = ({ onAddSubscriberClick }: SubscriptionFormProps) => {
+  const [_plans, setPlans] = useState<SubscriptionPlan[]>([]);
+  const [_groups, setGroups] = useState<Group[]>([]);
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [phoneNo, setPhoneNo] = useState<string>("");
   const [gender, setGender] = useState<string>("");
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [searching, setSearching] = useState<boolean>(false);
+  const [user, _setUser] = useState<User | null>(null);
   const [addingUser, setAddingUser] = useState<boolean>(false);
   const { gym } = useGym();
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const onDrop = (acceptedFiles: any) => {
-    console.log(acceptedFiles[0]);
+  const onDrop = (acceptedFiles: File[]) => {
     setImageFile(acceptedFiles[0]);
   };
+  
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: "image/*",
-  });
+  } as any);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,22 +51,10 @@ const SubscriptionForm = ({ onAddSusbcriberClick }: any) => {
     };
 
     fetchData();
-  }, []);
+  }, [gym._id]);
 
-  const handleSearchUser = async () => {
-    setSearching(true);
-    try {
-      // const userData = await searchUser(email, phoneNo);
-      // setUser(userData);
-    } catch (error) {
-      console.error("User not found", error);
-      setUser(null);
-    } finally {
-      setSearching(false);
-    }
-  };
-
-  const handleAddUser = async () => {
+  const handleAddUser = async (e: React.FormEvent) => {
+    e.preventDefault();
     setAddingUser(true);
     try {
       let image = null;
@@ -74,12 +63,11 @@ const SubscriptionForm = ({ onAddSusbcriberClick }: any) => {
           const uploadResponse = await uploadImage(imageFile);
           image = uploadResponse._id; // Assuming your API returns the URL of the uploaded image
         } catch (error) {
-          console.error('Error uploading image:', error);
-          // Handle error response
+          console.error("Error uploading image:", error);
           return;
         }
       }
-      onAddSusbcriberClick({
+      onAddSubscriberClick({
         email,
         phoneNo,
         name,
@@ -163,8 +151,7 @@ const SubscriptionForm = ({ onAddSusbcriberClick }: any) => {
 
       {!user && (
         <button
-          type="button"
-          onClick={handleAddUser}
+          type="submit"
           className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
           disabled={addingUser}
         >

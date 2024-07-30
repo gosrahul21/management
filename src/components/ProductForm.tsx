@@ -1,28 +1,34 @@
-import React, { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import Input from "../widgets/Input";
 
-const ProductForm = ({ product, onSubmit }) => {
-  const [formData, setFormData] = useState(
-    product || {
-      name: "",
-      price: "",
-      description: "",
-      image: null,
-    }
+interface Product {
+  name: string;
+  price: string;
+  description: string;
+  image: File | null;
+}
+
+interface ProductFormProps {
+  product?: Product;
+  onSubmit: (data: Product) => void;
+}
+
+const ProductForm = ({ product, onSubmit }: ProductFormProps) => {
+  const [formData, setFormData] = useState<Product>(
+    product || { name: "", price: "", description: "", image: null }
   );
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "image") {
-      setFormData({ ...formData, image: files[0] });
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, files }: any = e.target;
+    if (name === "image" && files) {
+      setFormData((prev) => ({ ...prev, image: files[0] }));
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission logic (e.g., API call)
     onSubmit(formData);
   };
 
@@ -37,8 +43,9 @@ const ProductForm = ({ product, onSubmit }) => {
         </label>
         <Input
           id="productNameId"
+          name="name"
           type="text"
-          placeholder="name"
+          placeholder="Name"
           value={formData.name}
           onChange={handleChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-700"
@@ -53,8 +60,9 @@ const ProductForm = ({ product, onSubmit }) => {
         </label>
         <Input
           id="priceId"
+          name="price"
           type="text"
-          placeholder="price"
+          placeholder="Price"
           value={formData.price}
           onChange={handleChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-700"
@@ -72,6 +80,7 @@ const ProductForm = ({ product, onSubmit }) => {
           value={formData.description}
           onChange={handleChange}
           className="shadow-md appearance-none rounded w-full py-2 px-3 text-gray-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-700"
+          rows={4}
         />
       </div>
       <div className="mb-4">
@@ -83,26 +92,18 @@ const ProductForm = ({ product, onSubmit }) => {
         </label>
         <Input
           id="fileId"
+          name="image"
           type="file"
-          placeholder="image"
           onChange={handleChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-100 leading-tight focus:outline-none focus:shadow-outline bg-gray-700"
         />
-        {console.log(typeof formData.image)}
-        {formData.image &&
-          (typeof formData.image === "string" ? (
-            <img
-              src={formData.image}
-              alt="Product"
-              className="mt-2 h-20 w-20 object-cover"
-            />
-          ) : (
-            <img
-              src={URL.createObjectURL(formData.image)}
-              alt="Product"
-              className="mt-2 h-20 w-20 object-cover"
-            />
-          ))}
+        {formData.image && (
+          <img
+            src={URL.createObjectURL(formData.image)}
+            alt="Product"
+            className="mt-2 h-20 w-20 object-cover"
+          />
+        )}
       </div>
       <div className="flex items-center justify-between">
         <button

@@ -17,11 +17,21 @@ interface AddGroupFormProps {
   onDelete?: (groupId: string) => void;
 }
 
-const AddGroupForm = ({ initialGroupData, onFormSubmit, onDelete }: AddGroupFormProps) => {
-  const [groupName, setGroupName] = useState(initialGroupData?.groupName || "");
-  const [weekdays, setWeekdays] = useState<string[]>(initialGroupData?.weekdays || []);
-  const [startTime, setStartTime] = useState(initialGroupData?.startTime || "");
-  const [endTime, setEndTime] = useState(initialGroupData?.endTime || "");
+const AddGroupForm = ({
+  initialGroupData,
+  onFormSubmit,
+  onDelete,
+}: AddGroupFormProps) => {
+  const [groupName, setGroupName] = useState<any>(
+    initialGroupData?.groupName || ""
+  );
+  const [weekdays, setWeekdays] = useState<string[]>(
+    initialGroupData?.weekdays || []
+  );
+  const [startTime, setStartTime] = useState<any>(
+    initialGroupData?.startTime || ""
+  );
+  const [endTime, setEndTime] = useState<any>(initialGroupData?.endTime || "");
 
   useEffect(() => {
     if (initialGroupData) {
@@ -61,9 +71,15 @@ const AddGroupForm = ({ initialGroupData, onFormSubmit, onDelete }: AddGroupForm
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-dark-primary rounded-lg shadow-md">
+    <form
+      onSubmit={handleSubmit}
+      className="p-4 bg-dark-primary rounded-lg shadow-md"
+    >
       <div className="mb-4">
-        <label htmlFor="groupName" className="block text-sm font-medium text-gray-200">
+        <label
+          htmlFor="groupName"
+          className="block text-sm font-medium text-gray-200"
+        >
           Group Name:
         </label>
         <Input
@@ -75,9 +91,19 @@ const AddGroupForm = ({ initialGroupData, onFormSubmit, onDelete }: AddGroupForm
         />
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-200">Weekdays:</label>
+        <label className="block text-sm font-medium text-gray-200">
+          Weekdays:
+        </label>
         <div className="mt-1 grid grid-cols-7 gap-2">
-          {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+          {[
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+          ].map((day) => (
             <label key={day} className="flex items-center text-gray-200">
               <input
                 type="checkbox"
@@ -92,7 +118,10 @@ const AddGroupForm = ({ initialGroupData, onFormSubmit, onDelete }: AddGroupForm
         </div>
       </div>
       <div className="mb-4">
-        <label htmlFor="startTime" className="block text-sm font-medium text-gray-200">
+        <label
+          htmlFor="startTime"
+          className="block text-sm font-medium text-gray-200"
+        >
           Start Time:
         </label>
         <input
@@ -105,7 +134,10 @@ const AddGroupForm = ({ initialGroupData, onFormSubmit, onDelete }: AddGroupForm
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="endTime" className="block text-sm font-medium text-gray-200">
+        <label
+          htmlFor="endTime"
+          className="block text-sm font-medium text-gray-200"
+        >
           End Time:
         </label>
         <input
@@ -130,7 +162,7 @@ const AddGroupForm = ({ initialGroupData, onFormSubmit, onDelete }: AddGroupForm
             onClick={handleDelete}
             className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
           >
-            <MdDelete size={18}/> 
+            <MdDelete size={18} />
           </button>
         )}
       </div>

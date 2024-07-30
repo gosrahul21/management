@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Spinner } from "../../widgets/Spinner";
 import GymPanel from "../../components/Gympanel";
 import moment from "moment";
 import { createSubscription } from "../../service/subscriptions/addSubscription";
@@ -11,7 +10,6 @@ import getSubscriptionPlans from "../../service/subscription-plan/getSubscriptio
 import { enqueueSnackbar } from "notistack";
 
 const AddSubscriptionPage = () => {
-  const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
@@ -19,9 +17,11 @@ const AddSubscriptionPage = () => {
     null
   );
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
-  const [coupon, setCoupon] = useState("");
-  const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
-  const [loading, setLoading] = useState(false);
+  const [coupon, setCoupon] = useState<any>("");
+  const [startDate, setStartDate] = useState<any>(
+    moment().format("YYYY-MM-DD")
+  );
+  const [_loading, setLoading] = useState<any>(false);
 
   const { gymId, memberId } = useParams();
 
@@ -67,10 +67,6 @@ const AddSubscriptionPage = () => {
       setLoading(false);
     }
   };
-
-  // if (loading) {
-  //   return <Spinner />;
-  // }
 
   return (
     <GymPanel>

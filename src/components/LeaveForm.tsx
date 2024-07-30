@@ -1,17 +1,36 @@
-import React, { useState } from "react";
+import { useState, FormEvent } from "react";
 import { FaSave, FaTimes } from "react-icons/fa";
 import EmployeeSearch from "./EmployeeSearch"; // Import the EmployeeSearch component
 import Input from "../widgets/Input";
 
-const LeaveForm = ({ leave, onSave, onClose }) => {
-  const [employee, setEmployee] = useState(leave ? leave.employee : null);
-  const [startDate, setStartDate] = useState(leave ? leave.startDate : "");
-  const [endDate, setEndDate] = useState(leave ? leave.endDate : "");
-  const [type, setType] = useState(leave ? leave.type : "");
-  const [comments, setComments] = useState(leave ? leave.comments : "");
-  const [error, setError] = useState("");
+interface Leave {
+  id?: string;
+  employee: { name: string };
+  startDate: string;
+  endDate: string;
+  type: string;
+  comments: string;
+}
 
-  const handleSubmit = (e) => {
+interface LeaveFormProps {
+  leave?: Leave;
+  onSave: (leave: Leave) => void;
+  onClose?: () => void;
+}
+
+const LeaveForm = ({ leave, onSave, onClose }: LeaveFormProps) => {
+  const [employee, setEmployee] = useState<Leave["employee"] | null>(
+    leave ? leave.employee : null
+  );
+  const [startDate, setStartDate] = useState<string>(
+    leave ? leave.startDate : ""
+  );
+  const [endDate, setEndDate] = useState<string>(leave ? leave.endDate : "");
+  const [type, setType] = useState<string>(leave ? leave.type : "");
+  const [comments, setComments] = useState<string>(leave ? leave.comments : "");
+  const [error, setError] = useState<string>("");
+
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     // Validation
@@ -33,7 +52,7 @@ const LeaveForm = ({ leave, onSave, onClose }) => {
       {error && <p className="text-red-500">{error}</p>}
 
       {/* Employee Search */}
-      <EmployeeSearch onSelect={(emp) => setEmployee(emp)} />
+      <EmployeeSearch onSelect={(emp: any) => setEmployee(emp)} />
       <div className="mb-4 p-2 bg-gray-700 text-white rounded min-h-[40px] flex items-center">
         {employee ? `${employee.name}` : "No employee selected"}
       </div>
@@ -106,7 +125,7 @@ const LeaveForm = ({ leave, onSave, onClose }) => {
           value={comments}
           onChange={(e) => setComments(e.target.value)}
           className="mt-1 block w-full p-2 bg-gray-700 text-white border border-gray-600 rounded"
-          rows="3"
+          rows={3}
         />
       </div>
 

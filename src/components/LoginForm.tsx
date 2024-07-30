@@ -1,31 +1,31 @@
-import { useEffect, useState } from 'react';
-import EyeIcon from '../assets/icons/eye-slash.svg';
-import EyeOpenIcon from '../assets/icons/eye-open.svg';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import EyeIcon from "../assets/icons/eye-slash.svg";
+import EyeOpenIcon from "../assets/icons/eye-open.svg";
+import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState<string[]>(Array(6).fill(''));
-  const [resendEnabled, setResendEnabled] = useState(false);
-  const [timer, setTimer] = useState(30);
-  const [loading, setLoading] = useState(false);
+const LoginForm: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [otpSent, setOtpSent] = useState<boolean>(false);
+  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [resendEnabled, setResendEnabled] = useState<boolean>(false);
+  const [timer, setTimer] = useState<number>(30);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle login logic here
-    console.log('Logged in with email and password');
+    console.log("Logged in with email and password");
   };
 
   const handleRequestOtp = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle OTP request logic here (e.g., call API to send OTP)
     setOtpSent(true);
-    console.log('OTP requested');
+    console.log("OTP requested");
   };
 
   const togglePasswordVisibility = () => {
@@ -33,13 +33,13 @@ const LoginForm = () => {
   };
 
   useEffect(() => {
-    let interval = null;
+    let interval: any = null;
     if (!resendEnabled) {
       interval = setInterval(() => {
         setTimer((prev) => {
           if (prev === 1) {
             setResendEnabled(true);
-            clearInterval(interval!);
+            if (interval) clearInterval(interval);
             return 0;
           }
           return prev - 1;
@@ -52,7 +52,10 @@ const LoginForm = () => {
     };
   }, [resendEnabled]);
 
-  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleOtpChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     const newOtp = [...otp];
     newOtp[index] = e.target.value;
     setOtp(newOtp);
@@ -64,7 +67,7 @@ const LoginForm = () => {
     }
 
     // If all OTP fields are filled, authenticate OTP
-    if (newOtp.every((digit) => digit !== '')) {
+    if (newOtp.every((digit) => digit !== "")) {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
@@ -73,8 +76,11 @@ const LoginForm = () => {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
       const prevInput = document.getElementById(`otp-${index - 1}`);
       if (prevInput) prevInput.focus();
     }
@@ -82,7 +88,7 @@ const LoginForm = () => {
 
   const handleResendOtp = () => {
     // Implement resend OTP logic here
-    console.log('OTP resent');
+    console.log("OTP resent");
     setResendEnabled(false);
     setTimer(30);
   };
@@ -101,7 +107,10 @@ const LoginForm = () => {
             className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded mb-4"
             required
           />
-          <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+          <button
+            type="submit"
+            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+          >
             Request OTP
           </button>
         </form>
@@ -125,9 +134,11 @@ const LoginForm = () => {
             <button
               onClick={handleResendOtp}
               disabled={!resendEnabled}
-              className={`py-2 px-4 ${resendEnabled ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600'} text-white rounded-lg transition duration-200`}
+              className={`py-2 px-4 ${
+                resendEnabled ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-600"
+              } text-white rounded-lg transition duration-200`}
             >
-              {resendEnabled ? 'Resend OTP' : `Resend OTP in ${timer}s`}
+              {resendEnabled ? "Resend OTP" : `Resend OTP in ${timer}s`}
             </button>
           </div>
         </div>
@@ -147,7 +158,7 @@ const LoginForm = () => {
           <label className="block mb-2 text-gray-200">Password</label>
           <div className="relative mb-4">
             <input
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded"
@@ -158,13 +169,22 @@ const LoginForm = () => {
               onClick={togglePasswordVisibility}
               className="absolute inset-y-0 right-0 px-3 text-gray-400"
             >
-              <img className="h-4 w-4 object-contain" src={showPassword ? EyeOpenIcon : EyeIcon} />
+              <img
+                className="h-4 w-4 object-contain"
+                src={showPassword ? EyeOpenIcon : EyeIcon}
+                alt="Toggle Password Visibility"
+              />
             </button>
           </div>
           <div className="mb-4">
-            <a href="#" className="text-blue-400 hover:underline">Forgot Password?</a>
+            <a href="#" className="text-blue-400 hover:underline">
+              Forgot Password?
+            </a>
           </div>
-          <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+          <button
+            type="submit"
+            className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+          >
             Login
           </button>
         </form>

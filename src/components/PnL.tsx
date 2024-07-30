@@ -1,12 +1,7 @@
 // src/components/DoughnutChart.js
-import React, { useEffect, useState } from 'react';
-import { Doughnut } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend
-} from 'chart.js';
+import { useEffect, useState } from "react";
+import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -18,12 +13,12 @@ const Pnl = () => {
 
   useEffect(() => {
     const chartData = {
-      labels: ['Profit', 'Expenses'],
+      labels: ["Profit", "Expenses"],
       datasets: [
         {
           data: [mockRevenue - mockExpenses, mockExpenses],
-          backgroundColor: ['#4caf50', '#ff6384'],
-          hoverBackgroundColor: ['#388e3c', '#e57373'],
+          backgroundColor: ["#4caf50", "#ff6384"],
+          hoverBackgroundColor: ["#388e3c", "#e57373"],
         },
       ],
     };

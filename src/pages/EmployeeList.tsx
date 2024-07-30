@@ -8,9 +8,9 @@ import { getEmployees } from "../service/employees/getEmployees";
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState<any>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState<any>("");
+  const [isLoading, setIsLoading] = useState<any>(true);
+  const [error, setError] = useState<any>(null);
   const navigate = useNavigate();
   const { gymId } = useParams();
 
@@ -92,12 +92,16 @@ const EmployeeList = () => {
               className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start"
             >
               <img
-                src={`${import.meta.env.VITE_BACKEND_URI}/image/${employee.userId.image}`}
+                src={`${import.meta.env.VITE_BACKEND_URI}/image/${
+                  employee.userId.image
+                }`}
                 alt={`${employee.name}'s profile`}
                 className="w-20 h-20 rounded-full mr-4 object-cover"
               />
               <div>
-                <h2 className="text-xl font-bold">{employee.userId.firstName} {employee.userId.lastName}</h2>
+                <h2 className="text-xl font-bold">
+                  {employee.userId.firstName} {employee.userId.lastName}
+                </h2>
                 <p className="text-gray-400">{employee.email}</p>
                 <p className="text-gray-400">{employee.phoneNo}</p>
                 <p className="mt-2 text-gray-300">Role: {employee.role}</p>

@@ -1,27 +1,44 @@
-import React, { useState, useEffect } from "react";
-import Input from "../widgets/Input";
-import { useGym } from "../context/GymContext";
+import React, { useState, useEffect } from 'react';
+import Input from '../widgets/Input';
+import { useGym } from '../context/GymContext';
 
-const SubscriptionForm = ({ selectedSusbcription, onSubmit, onDelete }) => {
-  const [subscriptionName, setSubscriptionName] = useState("");
-  const [durationDays, setDurationDays] = useState("");
-  const [pricing, setPricing] = useState("");
+interface Subscription {
+  planName: string;
+  durationInDays: number;
+  price: number;
+  gymId: string;
+}
+
+interface SubscriptionFormProps {
+  selectedSubscription?: {
+    planName?: string;
+    durationInDays?: number;
+    price?: number;
+  };
+  onSubmit: (subscription: Subscription) => void;
+  onDelete?: () => void;
+}
+
+const SubscriptionForm: React.FC<SubscriptionFormProps> = ({ selectedSubscription, onSubmit, onDelete }) => {
+  const [subscriptionName, setSubscriptionName] = useState<string>("");
+  const [durationDays, setDurationDays] = useState<string>("");
+  const [pricing, setPricing] = useState<string>("");
   const gymDetails = useGym();
 
   useEffect(() => {
-    if (selectedSusbcription) {
-      setSubscriptionName(selectedSusbcription.planName || "");
-      setDurationDays(selectedSusbcription.durationInDays?.toString() || "");
-      setPricing(selectedSusbcription.price || "");
+    if (selectedSubscription) {
+      setSubscriptionName(selectedSubscription.planName || "");
+      setDurationDays(selectedSubscription.durationInDays?.toString() || "");
+      setPricing(selectedSubscription.price?.toString() || "");
     }
-  }, [selectedSusbcription]);
+  }, [selectedSubscription]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
       planName: subscriptionName,
       durationInDays: parseFloat(durationDays),
-      price: pricing,
+      price: parseFloat(pricing),
       gymId: gymDetails.gym._id,
     });
   };
@@ -63,9 +80,9 @@ const SubscriptionForm = ({ selectedSusbcription, onSubmit, onDelete }) => {
           type="submit"
           className="bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 mr-2"
         >
-          {selectedSusbcription ? "Update Subscription" : "Add Subscription"}
+          {selectedSubscription ? "Update Subscription" : "Add Subscription"}
         </button>
-        {selectedSusbcription && (
+        {selectedSubscription && (
           <button
             type="button"
             onClick={onDelete}

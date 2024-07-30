@@ -1,7 +1,4 @@
-import { useParams } from "react-router-dom";
 import GymHeader from "./GymHeader";
-import { createContext, useContext, useEffect, useState } from "react";
-import { getGymDetails } from "../service/gym/gymService";
 import { GymProvider } from "../context/GymContext";
 
 const GymPanel = ({ children }: any) => {

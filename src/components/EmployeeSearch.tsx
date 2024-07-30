@@ -1,16 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import SearchIcon from "../assets/icons/search-icon.svg"; // Add the correct path to your search icon
 import Input from "../widgets/Input";
 
-const EmployeeSearch = ({ onSelect }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredEmployees, setFilteredEmployees] = useState([]);
-  const [employees, setEmployees] = useState([]);
+interface Employee {
+  id: number;
+  name: string;
+}
+
+interface EmployeeSearchProps {
+  onSelect: (employee: Employee) => void;
+}
+
+const EmployeeSearch: React.FC<EmployeeSearchProps> = ({ onSelect }) => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
 
   useEffect(() => {
     // Simulated fetch for employee data (replace with actual API call)
     const fetchEmployees = async () => {
-      const data = [
+      const data: Employee[] = [
         { id: 1, name: "John Doe" },
         { id: 2, name: "Jane Smith" },
         { id: 3, name: "Alice Johnson" },
@@ -29,15 +38,24 @@ const EmployeeSearch = ({ onSelect }) => {
     setFilteredEmployees(filtered);
   }, [searchTerm, employees]);
 
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleEmployeeSelect = (employee: Employee) => {
+    onSelect(employee);
+    setSearchTerm("");
+  };
+
   return (
     <div className="relative mb-4">
       <div className="relative">
         <Input
-          id=""
+          id="employee-search"
           type="text"
           placeholder="Search for an employee"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearchChange}
           className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded pl-10"
         />
         <img
@@ -51,10 +69,7 @@ const EmployeeSearch = ({ onSelect }) => {
           {filteredEmployees.map((employee) => (
             <div
               key={employee.id}
-              onClick={() => {
-                onSelect(employee);
-                setSearchTerm("");
-              }}
+              onClick={() => handleEmployeeSelect(employee)}
               className="p-2 hover:bg-gray-700 cursor-pointer"
             >
               {employee.name}

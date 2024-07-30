@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   createGroup,
   deleteGroup,
@@ -12,7 +12,7 @@ import { enqueueSnackbar } from "notistack";
 
 export const useGroup = () => {
   const [groups, setGroups] = useState<Group[]>();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<any>("");
   const [initialGroupData, setInitialGroupData] = useState<Group>();
   const { gymId } = useParams();
 
@@ -43,7 +43,7 @@ export const useGroup = () => {
 
   const filteredGroups = filterGroups();
 
-  const [isAddEditFormOpen, setisAddEditFormOpen] = useState(false);
+  const [isAddEditFormOpen, setisAddEditFormOpen] = useState<any>(false);
 
   const openAddEditForm = (formData: Group | null) => {
     setisAddEditFormOpen(true);
@@ -67,7 +67,7 @@ export const useGroup = () => {
         gymId,
         ...body,
       });
-      setGroups([group, ...groups]);
+      setGroups([group, ...(groups || [])]);
       enqueueSnackbar("Group created successfully", { variant: "success" });
 
       closeAddEditForm();

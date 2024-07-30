@@ -1,24 +1,22 @@
 // components/EmployeeForm.js
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Spinner } from "../widgets/Spinner";
 import Input from "../widgets/Input";
 import { createEmployee } from "../service/employees/createEmployeeService";
-import { checkUserExists } from "../service/employees/checkEmployeeExist";
 import { uploadImage } from "../service/upload/imageUpload";
 import { useGym } from "../context/GymContext";
 import { useNavigate } from "react-router-dom";
 
 const EmployeeForm = () => {
-  const [name, setName] = useState("");
-  const [employeeType, setEmployeeType] = useState("");
-  const [userExists, setUserExists] = useState(null); // null, true, false
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState("");
-  const [phoneNo, setPhoneNo] = useState("");
-  const [gender, setGender] = useState("");
-  const [imageFile, setImageFile] = useState(null);
-  const {gym} = useGym();
+  const [name, setName] = useState<any>("");
+  const [employeeType, setEmployeeType] = useState<any>("");
+  const [isSubmitting, setIsSubmitting] = useState<any>(false);
+  const [email, setEmail] = useState<any>("");
+  const [phoneNo, setPhoneNo] = useState<any>("");
+  const [gender, setGender] = useState<any>("");
+  const [imageFile, setImageFile] = useState<any>(null);
+  const { gym } = useGym();
   const navigate = useNavigate();
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -28,7 +26,7 @@ const EmployeeForm = () => {
 
   const employeeTypes = ["Trainer", "Admin", "Cleaner"];
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -38,14 +36,14 @@ const EmployeeForm = () => {
 
       // const userId = exists ? "existing_user_id" : "new_user_id"; // Replace with actual user ID logic
 
-      // upload image first 
+      // upload image first
       let image = null;
       if (imageFile) {
         try {
           const uploadResponse = await uploadImage(imageFile);
           image = uploadResponse._id; // Assuming your API returns the URL of the uploaded image
         } catch (error) {
-          console.error('Error uploading image:', error);
+          console.error("Error uploading image:", error);
           // Handle error response
           return;
         }
@@ -80,11 +78,11 @@ const EmployeeForm = () => {
     >
       <h2 className="text-2xl mb-4">Add Employee</h2>
 
-      {userExists === false && (
+      {/* {userExists === false && (
         <div className="mb-4 text-red-500">
           User does not exist. A new user will be created.
         </div>
-      )}
+      )} */}
 
       <label className="block mb-2">Email</label>
       <Input
