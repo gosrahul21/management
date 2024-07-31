@@ -39,11 +39,14 @@ export const AuthProvider = ({ children }: any) => {
     password?: string;
   }) => {
     try {
-      const response = await axios.post("http://localhost:3000/users", {
-        code,
-        email,
-        password
-      });
+      const response = await axios.post(
+        import.meta.env.VITE_BACKEND_URI + "/users",
+        {
+          code,
+          email,
+          password,
+        }
+      );
       const { jwtToken, refreshToken } = response.data;
       setJwt(jwtToken);
       setRefreshToken(refreshToken);
