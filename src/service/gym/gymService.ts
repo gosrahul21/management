@@ -1,15 +1,8 @@
-import axios from "axios";
 import apiClient from "../apiClient";
-
-const API_URL = "http://localhost:3000/gyms";
 
 export const fetchGyms = async () => {
   try {
-    const response = await axios.get(API_URL, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      },
-    });
+    const response = await apiClient.get("/gyms");
     return response.data;
   } catch (error) {
     console.error("Error fetching gyms", error);
