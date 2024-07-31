@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const AuthContext = createContext<{
   jwt: string | null;
   refreshToken: string | null;
-  login: (code: string) => void;
+  login: (data: { code?: string; email?: string; password?: string }) => void;
   logout: () => void;
 }>({
   jwt: "",
@@ -29,13 +29,23 @@ export const AuthProvider = ({ children }: any) => {
     location.pathname === "/login" && navigate("/");
   }, [jwt, refreshToken]);
 
-  const login = async (code: string) => {
+  const login = async ({
+    code,
+    email,
+    password,
+  }: {
+    code?: string;
+    email?: string;
+    password?: string;
+  }) => {
     try {
       const response = await axios.post("http://localhost:3000/users", {
         code,
+        email,
+        password
       });
-      const { jwt, refreshToken } = response.data;
-      setJwt(jwt);
+      const { jwtToken, refreshToken } = response.data;
+      setJwt(jwtToken);
       setRefreshToken(refreshToken);
     } catch (error) {
       console.error("Error during login", error);

@@ -58,7 +58,10 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -126,7 +129,9 @@ const DashboardPage = () => {
               type="text"
               placeholder="Search by gym name..."
               value={searchTerm}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchTerm(e.target.value)
+              }
               className="bg-gray-700 text-white p-2 rounded-l-md w-1/3 focus:outline-none"
             />
             <button className="bg-blue-600 text-white py-2 px-4 rounded-r-md hover:bg-blue-700">
@@ -152,6 +157,10 @@ const DashboardPage = () => {
             />
           ))}
         </section>
+
+        <div className="w-full flex justify-center h-full text-gray-300 text-2xl">
+          {!filteredGyms.length ? "Please Add Gym" : ""}
+        </div>
       </main>
     </div>
   );

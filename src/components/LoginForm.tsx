@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import EyeIcon from "../assets/icons/eye-slash.svg";
 import EyeOpenIcon from "../assets/icons/eye-open.svg";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authContext";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -14,11 +15,13 @@ const LoginForm: React.FC = () => {
   const [timer, setTimer] = useState<number>(30);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const {login} = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle login logic here
     console.log("Logged in with email and password");
+    login({email,password})
   };
 
   const handleRequestOtp = (e: React.FormEvent) => {

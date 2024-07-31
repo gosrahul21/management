@@ -10,7 +10,7 @@ const LoginPage = () => {
   const googleLogin = useGoogleLogin({
     flow: "auth-code",
     onSuccess: async (tokenResponse: { code: string }) => {
-      await login(tokenResponse.code);
+      await login({ code: tokenResponse.code });
     },
   });
 
