@@ -8,17 +8,18 @@ import {
   updateMember,
 } from "../../../service/subscriptions/addSubscription";
 import { enqueueSnackbar } from "notistack";
+import useSubscription from "../../susbcription-page/hooks/useSubscription";
+import moment from "moment";
 
 export const useSubscribers = () => {
   const [subscribers, setSubscribers] = useState<Member[]>([]);
-  const [searchTerm, setSearchTerm] = useState<any>("");
-  const [filter, setFilter] = useState<any>("all");
-  const [planFilter, setPlanFilter] = useState<any>("all");
-  const [initialSubscriberData, setInitialSubscriberData] = useState<
-    Member | undefined
-  >(undefined);
-  const [isAddEditFormOpen, setIsAddEditFormOpen] = useState<any>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filter, setFilter] = useState<string>("all");
+  const [planFilter, setPlanFilter] = useState<string>("all");
+  const [initialSubscriberData, setInitialSubscriberData] = useState<Member | undefined>(undefined);
+  const [isAddEditFormOpen, setIsAddEditFormOpen] = useState<boolean>(false);
   const { gymId } = useParams<{ gymId: string }>();
+  const { subscriptions } = useSubscription();
 
   useEffect(() => {
     if (!gymId) return;
@@ -46,67 +47,53 @@ export const useSubscribers = () => {
     }
   };
 
-  const updateGymSubscriber = async (
-    subscriberId: string,
-    updateSubscriberDto: Partial<CreateMemberDTO>
-  ) => {
+  const updateGymSubscriber = async (subscriberId: string, updateSubscriberDto: Partial<CreateMemberDTO>) => {
     try {
-      const updatedSubscriber = await updateMember(
-        subscriberId,
-        updateSubscriberDto
-      );
-      enqueueSnackbar("Subscriber added successsfully");
-      setSubscribers(
-        subscribers.map((subscriber) =>
-          subscriber._id === subscriberId ? updatedSubscriber : subscriber
-        )
-      );
+      const updatedSubscriber = await updateMember(subscriberId, updateSubscriberDto);
+      enqueueSnackbar("Subscriber added successfully");
+      setSubscribers(subscribers.map((subscriber) =>
+        subscriber._id === subscriberId ? updatedSubscriber : subscriber
+      ));
       closeAddEditForm();
     } catch (error) {
       console.error("Error occurred while updating subscriber", error);
     }
   };
 
-  // requried in future
-  // const filterSubscribers = () => {
-  //   const currentDate = moment();
-  //   return subscribers.filter((subscriber) => {
-  //     const expiryDate = moment(subscriber.membershipExpiryDate);
-  //     const isExpired = expiryDate.isBefore(currentDate);
-  //     const isActive = !isExpired;
-  //     let passesFilter = true;
+  const filterSubscribers = () => {
+    const currentDate = moment();
+    return subscribers.filter((subscriber) => {
+      const startDate = subscriber.activeSubscriptions?.startDate;
+      const durationInDays = subscriber.activeSubscriptions?.planId?.durationInDays;
+      const endDate = moment(new Date(startDate)).add(durationInDays, "days");
+      const daysLeft = endDate.diff(currentDate, "days");
+      const isExpired = daysLeft < 0;
+      const isExpiringSoon = daysLeft <= 3 && daysLeft >= 0;
 
-  //     if (filter === "subscribed") passesFilter = isActive;
-  //     if (filter === "expired") passesFilter = isExpired;
-  //     if (planFilter !== "all")
-  //       passesFilter = passesFilter && subscriber.membershipType === planFilter;
-  //     if (
-  //       !(subscriber.userId.firstName + " " + subscriber.userId.lastName)
-  //         .toLowerCase()
-  //         .includes(searchTerm.toLowerCase())
-  //     )
-  //       passesFilter = false;
+      let passesFilter = true;
 
-  //     return passesFilter;
-  //   });
-  // };
+      if (filter === "subscribed") passesFilter = !isExpired;
+      if (filter === "expired") passesFilter = isExpired;
+      if (filter === "expiring_soon") passesFilter = isExpiringSoon;
+      if (planFilter !== "all") passesFilter = passesFilter && subscriber.activeSubscriptions?.planId?.planName === planFilter;
+      if (!(subscriber.userId.firstName + " " + subscriber.userId.lastName).toLowerCase().includes(searchTerm.toLowerCase())) passesFilter = false;
+
+      return passesFilter;
+    });
+  };
 
   const sendMessageOnWhatsApp = (subscriber: Member) => {
     const phoneNumber = subscriber?.userId?.phoneNo?.replace(/[^0-9]/g, ""); // Ensure phone number is digits only
     const message = `Hello ${subscriber.userId.firstName},`;
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
   };
 
-  // const filteredSubscribers = filterSubscribers();
+  const filteredSubscribers = filterSubscribers();
 
   const handleFilterChange = (newFilter: string) => setFilter(newFilter);
-  const handlePlanFilterChange = (newPlanFilter: string) =>
-    setPlanFilter(newPlanFilter);
-  const handleSearchTermChange = (newSearchTerm: string) =>
-    setSearchTerm(newSearchTerm);
+  const handlePlanFilterChange = (newPlanFilter: string) => setPlanFilter(newPlanFilter);
+  const handleSearchTermChange = (newSearchTerm: string) => setSearchTerm(newSearchTerm);
 
   const openAddEditForm = (subscriber?: Member) => {
     setInitialSubscriberData(subscriber);
@@ -119,7 +106,7 @@ export const useSubscribers = () => {
   };
 
   return {
-    subscribers,
+    subscribers: filteredSubscribers,
     filter,
     planFilter,
     searchTerm,
@@ -131,8 +118,8 @@ export const useSubscribers = () => {
     closeAddEditForm,
     createGymSubscriber,
     updateGymSubscriber,
-    // deleteGymSubscriber,
     isAddEditFormOpen,
     initialSubscriberData,
+    subscriptions
   };
 };

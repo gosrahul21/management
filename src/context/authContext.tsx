@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { enqueueSnackbar } from "notistack";
 
 const AuthContext = createContext<{
   jwt: string | null;
@@ -50,8 +51,10 @@ export const AuthProvider = ({ children }: any) => {
       const { jwtToken, refreshToken } = response.data;
       setJwt(jwtToken);
       setRefreshToken(refreshToken);
+      enqueueSnackbar("Login Successfull", { variant: "success" });
     } catch (error) {
       console.error("Error during login", error);
+      enqueueSnackbar("Login failed", { variant: "error" });
     }
   };
 

@@ -283,7 +283,7 @@ const UserProfile = () => {
                 {user.activeSubscriptions ? (
                   <div className="mb-4">
                     <p className="text-gray-300">
-                      Plan: {user.activeSubscriptions?.planId.planName}
+                      Plan: {user.activeSubscriptions?.planId?.planName}
                     </p>
 
                     <p className="text-gray-300">

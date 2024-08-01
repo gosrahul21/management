@@ -4,7 +4,6 @@ import EyeOpenIcon from "../assets/icons/eye-open.svg";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
-
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -19,16 +18,20 @@ const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Logged in with email and password");
-    login({ email, password });
+    setLoading(true);
+
+    try {
+      await login({ email, password });
+    } catch (error) {
+    }
+    setLoading(false);
   };
 
   const handleRequestOtp = (e: React.FormEvent) => {
     e.preventDefault();
     setOtpSent(true);
-    console.log("OTP requested");
   };
 
   const togglePasswordVisibility = () => {
@@ -88,7 +91,6 @@ const LoginForm: React.FC = () => {
   };
 
   const handleResendOtp = () => {
-    console.log("OTP resent");
     setResendEnabled(false);
     setTimer(30);
   };
@@ -149,7 +151,8 @@ const LoginForm: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+              className={`bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+              disabled={loading}
             >
               Login
             </button>

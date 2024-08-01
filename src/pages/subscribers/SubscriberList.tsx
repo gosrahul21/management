@@ -2,10 +2,10 @@ import moment from "moment"; // Import moment for date manipulation
 import GymPanel from "../../components/Gympanel";
 import SearchIcon from "../../assets/icons/search-icon.svg";
 import WhatsappIcon from "../../assets/icons/whatsapp-icon.svg";
-import { useSubscribers } from "./hooks/userSubscribers";
 import SubscriberForm from "../../components/SubscriberForm";
 import Modal from "../../components/Modal";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSubscribers } from "./hooks/userSubscribers";
 
 const SubscriberList = () => {
   const {
@@ -22,10 +22,11 @@ const SubscriberList = () => {
     createGymSubscriber,
     closeAddEditForm,
     openAddEditForm,
+    subscriptions
   } = useSubscribers();
   const { gymId } = useParams();
-
   const navigate = useNavigate();
+
   return (
     <GymPanel>
       <div className="p-6">
@@ -52,7 +53,7 @@ const SubscriberList = () => {
         </Modal>
 
         {/* Filter Section */}
-        <div className="flex flex-col md:flex-row   mb-6 space-y-4 md:space-y-0 md:space-x-4">
+        <div className="flex flex-col md:flex-row mb-6 space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setFilter("all")}
@@ -79,9 +80,9 @@ const SubscriberList = () => {
               Expired
             </button>
             <button
-              onClick={() => setFilter("expired")}
+              onClick={() => setFilter("expiring_soon")}
               className={`px-4 py-2 rounded ${
-                filter === "expired" ? "bg-blue-600" : "bg-gray-700"
+                filter === "expiring_soon" ? "bg-blue-600" : "bg-gray-700"
               } hover:bg-blue-700`}
             >
               Expiring Soon
@@ -93,9 +94,9 @@ const SubscriberList = () => {
             className="bg-gray-700 text-white p-2 rounded"
           >
             <option value="all">All Plans</option>
-            <option value="Premium Membership">Premium Membership</option>
-            <option value="Basic Membership">Basic Membership</option>
-            <option value="Standard Membership">Standard Membership</option>
+            {subscriptions.map((subs) => (
+              <option key={subs.planName}>{subs.planName}</option>
+            ))}
           </select>
           <div className="flex items-center w-full md:w-auto">
             <input
@@ -115,13 +116,8 @@ const SubscriberList = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {subscribers.map((subscriber) => {
             const startDate = subscriber.activeSubscriptions?.startDate;
-            const durationInDays =
-              subscriber.activeSubscriptions?.planId?.durationInDays;
-
-            const endDate = moment(new Date(startDate)).add(
-              durationInDays,
-              "days"
-            );
+            const durationInDays = subscriber.activeSubscriptions?.planId?.durationInDays;
+            const endDate = moment(new Date(startDate)).add(durationInDays, "days");
             const daysLeft = endDate.diff(moment(), "days");
 
             console.log({
@@ -138,13 +134,11 @@ const SubscriberList = () => {
                     `/gym/${gymId}/subscriber/profile/${subscriber?._id}`
                   )
                 }
-                className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex space-x-2  flex-row items-start"
+                className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex space-x-2 flex-row items-start"
               >
                 <img
-                  src={`${import.meta.env.VITE_BACKEND_URI}/image/${
-                    subscriber?.userId?.image
-                  }`}
-                  alt={` profile`}
+                  src={`${import.meta.env.VITE_BACKEND_URI}/image/${subscriber?.userId?.image}`}
+                  alt={`profile`}
                   className="w-20 h-20 rounded-full mb-4 md:mb-0 md:mr-4 object-cover"
                 />
                 <div className="flex-1">
@@ -156,7 +150,7 @@ const SubscriberList = () => {
                   <p className="text-gray-400">{subscriber?.userId?.email}</p>
                   <p className="text-gray-400">{subscriber?.userId?.phoneNo}</p>
                   <p className="mt-2 text-gray-300">
-                    Plan: {subscriber.activeSubscriptions?.planId?.planName}
+                    Plan: {subscriber.activeSubscriptions?.planId?.planName || 'NA'}
                   </p>
                   <p
                     className={`mt-1 ${
