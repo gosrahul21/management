@@ -4,7 +4,11 @@ const GymCard = ({ gym, onClick }: { onClick: () => void; gym: any }) => {
   return (
     <div className="bg-gray-800 rounded-lg overflow-hidden shadow-md">
       <img
-        src={`${import.meta.env.VITE_BACKEND_URI}/image/${gym.image}`}
+        src={
+          gym.image
+            ? `${import.meta.env.VITE_BACKEND_URI}/image/${gym.image}`
+            : import.meta.env.VITE_DEFAULT_ALT_IMAGE
+        }
         alt={gym.name}
         className="w-full h-56 object-cover"
       />

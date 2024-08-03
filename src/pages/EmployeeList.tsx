@@ -92,9 +92,13 @@ const EmployeeList = () => {
               className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start"
             >
               <img
-                src={`${import.meta.env.VITE_BACKEND_URI}/image/${
-                  employee.userId.image
-                }`}
+                src={
+                  employee?.userId.image
+                    ? `${import.meta.env.VITE_BACKEND_URI}/image/${
+                        employee.userId.image
+                      }`
+                    : import.meta.env.VITE_DEFAULT_ALT_IMAGE
+                }
                 alt={`${employee.name}'s profile`}
                 className="w-20 h-20 rounded-full mr-4 object-cover"
               />
