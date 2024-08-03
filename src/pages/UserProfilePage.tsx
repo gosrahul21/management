@@ -404,38 +404,41 @@ const UserProfile = () => {
             </form>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-800 p-6 rounded-lg shadow-md flex flex-col md:flex-row items-start">
-                <img
-                  src={
-                    user.userId?.image
-                      ? `${import.meta.env.VITE_BACKEND_URI}/image/${
-                          user.userId?.image
-                        }`
-                      : import.meta.env.VITE_DEFAULT_ALT_IMAGE
-                  }
-                  alt={`${user.userId?.firstName}'s profile`}
-                  className="w-32 h-32 rounded-full object-cover mr-4 mb-4 md:mb-0"
-                />
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold">{`${user.userId.firstName} ${user.userId.lastName}`}</h2>
-                  <p className="text-gray-400">{user.userId.email}</p>
-                  <p className="text-gray-400">+91 {user.userId.phoneNo}</p>
-                  <p className="text-gray-300">
-                    Joined Date: {moment(user.createdAt).format("LL")}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={WhatsappIcon}
-                      className="h-8 w-8 cursor-pointer"
-                      onClick={sendMessageOnWhatsApp}
-                    />
-                    <FcPhone
-                      onClick={makePhoneCall}
-                      className="cursor-pointer"
-                      size={30}
-                    />
+              <div className="bg-gray-800 p-6 rounded-lg shadow-md flex items-start">
+                <div className="flex flex-col md:flex-row">
+                  <img
+                    src={
+                      user.userId?.image
+                        ? `${import.meta.env.VITE_BACKEND_URI}/image/${
+                            user.userId?.image
+                          }`
+                        : import.meta.env.VITE_DEFAULT_ALT_IMAGE
+                    }
+                    alt={`${user.userId?.firstName}'s profile`}
+                    className="w-32 h-32 rounded-full object-cover mr-4 mb-4 md:mb-0"
+                  />
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold">{`${user.userId.firstName} ${user.userId.lastName}`}</h2>
+                    <p className="text-gray-400">{user.userId.email}</p>
+                    <p className="text-gray-400">+91 {user.userId.phoneNo}</p>
+                    <p className="text-gray-300">
+                      Joined Date: {moment(user.createdAt).format("LL")}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={WhatsappIcon}
+                        className="h-8 w-8 cursor-pointer"
+                        onClick={sendMessageOnWhatsApp}
+                      />
+                      <FcPhone
+                        onClick={makePhoneCall}
+                        className="cursor-pointer"
+                        size={30}
+                      />
+                    </div>
                   </div>
                 </div>
+
                 <div className="ml-auto">
                   <QRCode
                     value={user.userId._id}
@@ -504,7 +507,7 @@ const UserProfile = () => {
                 </div>
               </div>
 
-              <div className="bg-gray-800 p-6 rounded-lg shadow-md col-span-2">
+              <div className="bg-gray-800 p-6 rounded-lg shadow-md ">
                 <h3 className="text-xl font-bold mb-4">Attendance Overview</h3>
                 <Bar data={attendanceData} options={{ responsive: true }} />
               </div>
