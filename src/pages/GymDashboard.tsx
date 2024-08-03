@@ -164,7 +164,9 @@ const GymDashboard = () => {
               <div className="py-1">
                 <div className="flex gap-2">
                   <div className="h-4 w-10 bg-[#3399FF]"></div>
-                  <p className="text-bold">Active clients: {gymDetails.activeClients}</p>
+                  <p className="text-bold">
+                    Active clients: {gymDetails.activeClients}
+                  </p>
                 </div>
 
                 <div className="flex gap-2">
@@ -232,7 +234,7 @@ const GymDashboard = () => {
                 Revenue This Year
               </h2>
               <p className="text-4xl font-semibold text-center">
-                ${gymDetails.revenueThisYear}
+                ₹{gymDetails.revenueThisYear}
               </p>
             </div>
           </div>
@@ -244,7 +246,7 @@ const GymDashboard = () => {
                 Expenses This Year
               </h2>
               <p className="text-4xl font-semibold text-center">
-                ${gymDetails.expensesThisYear}
+                ₹{gymDetails.expensesThisYear}
               </p>
             </div>
           </div>
