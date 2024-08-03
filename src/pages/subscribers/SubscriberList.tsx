@@ -22,7 +22,7 @@ const SubscriberList = () => {
     createGymSubscriber,
     closeAddEditForm,
     openAddEditForm,
-    subscriptions
+    subscriptions,
   } = useSubscribers();
   const { gymId } = useParams();
   const navigate = useNavigate();
@@ -116,9 +116,14 @@ const SubscriberList = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {subscribers.map((subscriber) => {
             const startDate = subscriber.activeSubscriptions?.startDate;
-            const durationInDays = subscriber.activeSubscriptions?.planId?.durationInDays;
-            const endDate = moment(new Date(startDate)).add(durationInDays, "days");
+            const durationInDays =
+              subscriber.activeSubscriptions?.planId?.durationInDays;
+            const endDate = moment(new Date(startDate)).add(
+              durationInDays,
+              "days"
+            );
             const daysLeft = endDate.diff(moment(), "days");
+            const daysToStart = moment(startDate).diff(moment(), "days");
 
             console.log({
               daysLeft,
@@ -137,7 +142,13 @@ const SubscriberList = () => {
                 className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex space-x-2 flex-row items-start"
               >
                 <img
-                  src={subscriber?.userId?.image?`${import.meta.env.VITE_BACKEND_URI}/image/${subscriber?.userId?.image}`:import.meta.env.VITE_DEFAULT_ALT_IMAGE}
+                  src={
+                    subscriber?.userId?.image
+                      ? `${import.meta.env.VITE_BACKEND_URI}/image/${
+                          subscriber?.userId?.image
+                        }`
+                      : import.meta.env.VITE_DEFAULT_ALT_IMAGE
+                  }
                   alt={`profile`}
                   className="w-20 h-20 rounded-full mb-4 md:mb-0 md:mr-4 object-cover"
                 />
@@ -150,16 +161,19 @@ const SubscriberList = () => {
                   <p className="text-gray-400">{subscriber?.userId?.email}</p>
                   <p className="text-gray-400">{subscriber?.userId?.phoneNo}</p>
                   <p className="mt-2 text-gray-300">
-                    Plan: {subscriber.activeSubscriptions?.planId?.planName || 'NA'}
+                    Plan:{" "}
+                    {subscriber.activeSubscriptions?.planId?.planName || "NA"}
                   </p>
                   <p
                     className={`mt-1 ${
                       isExpired ? "text-red-500" : "text-green-400"
                     }`}
                   >
-                    {subscriber?.activeSubscriptions
+                    {subscriber.activeSubscriptions
                       ? isExpired
                         ? "Expired"
+                        : new Date().getTime() < new Date(startDate).getTime()
+                        ? `${daysToStart} days to start`
                         : `${daysLeft} days left`
                       : "New Member"}
                   </p>
