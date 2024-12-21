@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Input from '../widgets/Input';
 import { useGym } from '../context/GymContext';
+import { MdDelete } from 'react-icons/md';
 
 interface Subscription {
   planName: string;
@@ -12,6 +13,7 @@ interface Subscription {
 interface SubscriptionFormProps {
   selectedSubscription?: {
     planName?: string;
+    totalMembers: number;
     durationInDays?: number;
     price?: number;
   };
@@ -82,13 +84,14 @@ const SubscriptionForm: React.FC<SubscriptionFormProps> = ({ selectedSubscriptio
         >
           {selectedSubscription ? "Update Subscription" : "Add Subscription"}
         </button>
-        {selectedSubscription && (
+        {selectedSubscription && !selectedSubscription?.totalMembers && (
           <button
             type="button"
             onClick={onDelete}
             className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
           >
-            Delete Subscription
+            {/* Delete Subscription */}
+            <MdDelete/>
           </button>
         )}
       </div>

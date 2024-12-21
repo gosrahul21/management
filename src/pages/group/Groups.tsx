@@ -36,7 +36,7 @@ const GroupList = () => {
           }
         >
           <AddGroupForm
-            initialGroupData={initialGroupData}
+            initialGroupData={initialGroupData!}
             onFormSubmit={
               initialGroupData
                 ? (formData) => updateGymGroup(initialGroupData._id, formData)
@@ -84,7 +84,7 @@ const GroupList = () => {
                     Time: {group?.startTime} - {group?.endTime}
                   </p>
                   <p className="text-gray-400">Instructor: {"N/A"}</p>
-                  <p className="text-gray-400">Total Members: {"N/A"}</p>
+                  <p className="text-gray-400">Total Members: {group?.totalMembers}</p>
                 </div>
                 <EditIcon
                   onClick={(e: any) => {

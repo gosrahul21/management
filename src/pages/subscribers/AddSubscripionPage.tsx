@@ -12,6 +12,7 @@ import {
   updateSubscription,
 } from "../../service/subscriptions/addSubscription";
 import { getSubscriptionById } from "../../service/subscriptions/getSusbcription";
+import { MdDelete, MdDeleteOutline } from "react-icons/md";
 
 const AddOrUpdateSubscriptionPage = () => {
   const navigate = useNavigate();
@@ -97,8 +98,12 @@ const AddOrUpdateSubscriptionPage = () => {
       }
 
       navigate(`/gym/${gymId}/subscribers`);
-    } catch (error) {
-      console.error("Error saving subscription:", error);
+    } catch (error: any) {
+      console.error("Error saving subscription:", error.response);
+      enqueueSnackbar(
+        error?.response?.data?.message || "Error saving subscription:",
+        { variant: "error" }
+      );
     } finally {
       setLoading(false);
     }
@@ -235,7 +240,8 @@ const AddOrUpdateSubscriptionPage = () => {
                       onClick={() => removeHoldDate(index)}
                       className="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
                     >
-                      Remove
+                      {/* Remove */}
+                      <MdDelete />
                     </button>
                   </div>
                 </div>

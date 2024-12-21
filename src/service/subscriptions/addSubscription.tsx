@@ -58,7 +58,7 @@ export const holdSubscriptionPlan = async (
 
 export const updateSubscription = async (id: string, data: any) => {
   try {
-    const response = await apiClient.patch(`/subscriptions/${id}/hold`, data);
+    const response = await apiClient.patch(`/subscriptions/${id}`, data);
     return response.data;
   } catch (error) {
     console.error("Failed to Add Subscription", id, error);

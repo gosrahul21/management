@@ -52,7 +52,7 @@ const useSubscription = () => {
       setSubscriptions(
         subscriptions.map((subscription) =>
           subscription._id === subscriptionId
-            ? updatedsubscription
+            ? { ...subscription, ...updatedsubscription }
             : subscription
         )
       );

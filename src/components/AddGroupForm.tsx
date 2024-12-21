@@ -6,6 +6,7 @@ interface Group {
   _id?: string;
   groupName: string;
   gymId: string;
+  totalMembers: number;
   weekdays: string[];
   startTime: string;
   endTime: string;
@@ -156,7 +157,7 @@ const AddGroupForm = ({
         >
           {initialGroupData ? "Update Group" : "Add Group"}
         </button>
-        {initialGroupData && (
+        {initialGroupData && initialGroupData.totalMembers === 0 && (
           <button
             type="button"
             onClick={handleDelete}

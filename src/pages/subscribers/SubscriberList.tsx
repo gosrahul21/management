@@ -7,6 +7,7 @@ import Modal from "../../components/Modal";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSubscribers } from "./hooks/userSubscribers";
 import Input from "../../widgets/Input";
+import { MdOutlineEdit } from "react-icons/md";
 
 const SubscriberList = () => {
   const {
@@ -170,13 +171,13 @@ const SubscriberList = () => {
               subscriber.activeSubscriptions?.planId?.durationInDays;
             const holdDates = subscriber.activeSubscriptions?.holdDates || [];
             const isOnHold = holdDates.length > 0;
-            const endDate = moment(new Date(startDate)).add(
-              durationInDays,
-              "days"
-            );
-            const daysLeft = endDate.diff(moment(), "days");
-            const daysToStart = moment(startDate).diff(moment(), "days");
-            const isExpired = daysLeft < 0;
+            // const endDate = moment(new Date(startDate)).add(
+            //   durationInDays,
+            //   "days"
+            // );
+            const daysLeft = subscriber?.activeSubscriptions?.remainingDays;
+            const daysToStart = daysLeft - durationInDays;
+            const isExpired = daysLeft <= 0;
 
             return (
               <div
@@ -251,7 +252,8 @@ const SubscriberList = () => {
                       }}
                       className="mt-2 bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded"
                     >
-                      Update Plan
+                      {/* Update Plan */}
+                      <MdOutlineEdit />
                     </button>
                   )}
                 </div>

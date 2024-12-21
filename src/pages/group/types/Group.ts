@@ -3,6 +3,7 @@ export default interface Group {
     groupName: string;
     gymId: string;
     weekdays: string[];
+    totalMembers: number;
     startTime: string;
     endTime: string;
     createdAt: string;

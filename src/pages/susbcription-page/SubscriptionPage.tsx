@@ -65,13 +65,21 @@ const SubscriptionList = () => {
             <div
               key={subscription?._id}
               className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg duration-500 flex items-start justify-between cursor-pointer"
-              onClick={() =>{}
+              onClick={
+                () => {}
                 // navigate(`/subscription/profile/${subscription?._id}`)
               }
             >
               <div>
                 <h2 className="text-xl font-bold">{subscription.planName}</h2>
-                <p className="text-gray-400">Price: {subscription.price}</p>
+                <p className="text-gray-400">
+                  Price:
+                  <span className="font-bold"> ₹{subscription.price}</span>{" "}
+                </p>
+                <p className="text-gray-400">
+                  Total Subscriptions:{" "}
+                  <span className="font-bold">{subscription.totalMembers}</span>
+                </p>
               </div>
               <EditIcon
                 onClick={(e: any) => {
