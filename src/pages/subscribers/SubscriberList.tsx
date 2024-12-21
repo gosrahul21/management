@@ -6,6 +6,7 @@ import SubscriberForm from "../../components/SubscriberForm";
 import Modal from "../../components/Modal";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSubscribers } from "./hooks/userSubscribers";
+import Input from "../../widgets/Input";
 
 const SubscriberList = () => {
   const {
@@ -23,7 +24,18 @@ const SubscriberList = () => {
     closeAddEditForm,
     openAddEditForm,
     subscriptions,
+    holdPlan,
+    releaseHoldPlan,
+    holdStartDate,
+    holdEndDate,
+    openHoldModal,
+    isHoldModalOpen,
+    closeHoldModal,
+    setHoldStartDate,
+    setHoldEndDate,
+    handleHoldPlanSubmit,
   } = useSubscribers();
+
   const { gymId } = useParams();
   const navigate = useNavigate();
 
@@ -50,6 +62,44 @@ const SubscriberList = () => {
           }
         >
           <SubscriberForm onAddSubscriberClick={createGymSubscriber} />
+        </Modal>
+
+        {/* Hold Plan Modal */}
+        <Modal
+          isOpen={isHoldModalOpen}
+          onClose={closeHoldModal}
+          title="Hold Plan"
+        >
+          <div className="flex flex-col space-y-4">
+            <div>
+              <label className="block text-gray-400">Hold Start Date</label>
+              <Input
+                type="date"
+                id="holdStartDate"
+                value={holdStartDate}
+                onChange={(e) => setHoldStartDate(e.target.value)}
+                className="mt-1 block w-full p-2 bg-gray-700 text-white border border-gray-600 rounded"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-gray-400">Hold End Date</label>
+              <Input
+                type="date"
+                id="holdEndDate"
+                value={holdEndDate}
+                onChange={(e) => setHoldEndDate(e.target.value)}
+                className="mt-1 block w-full p-2 bg-gray-700 text-white border border-gray-600 rounded"
+                required
+              />
+            </div>
+            <button
+              onClick={handleHoldPlanSubmit}
+              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg shadow-md"
+            >
+              Confirm Hold
+            </button>
+          </div>
         </Modal>
 
         {/* Filter Section */}
@@ -118,19 +168,16 @@ const SubscriberList = () => {
             const startDate = subscriber.activeSubscriptions?.startDate;
             const durationInDays =
               subscriber.activeSubscriptions?.planId?.durationInDays;
+            const holdDates = subscriber.activeSubscriptions?.holdDates || [];
+            const isOnHold = holdDates.length > 0;
             const endDate = moment(new Date(startDate)).add(
               durationInDays,
               "days"
             );
             const daysLeft = endDate.diff(moment(), "days");
             const daysToStart = moment(startDate).diff(moment(), "days");
-
-            console.log({
-              daysLeft,
-              durationInDays: subscriber.activeSubscriptions,
-            });
-
             const isExpired = daysLeft < 0;
+
             return (
               <div
                 key={subscriber._id}
@@ -169,7 +216,9 @@ const SubscriberList = () => {
                       isExpired ? "text-red-500" : "text-green-400"
                     }`}
                   >
-                    {subscriber.activeSubscriptions
+                    {isOnHold
+                      ? "Plan is on hold"
+                      : subscriber.activeSubscriptions
                       ? isExpired
                         ? "Expired"
                         : new Date().getTime() < new Date(startDate).getTime()
@@ -188,6 +237,21 @@ const SubscriberList = () => {
                       className="mt-2 bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded"
                     >
                       {isExpired ? "Renew Plan" : "Add Plan"}
+                    </button>
+                  )}
+
+                  {subscriber.activeSubscriptions && !isExpired && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // openHoldModal(subscriber);
+                        navigate(
+                          `/gym/${gymId}/add-subscription/${subscriber._id}/${subscriber.activeSubscriptions._id}`
+                        );
+                      }}
+                      className="mt-2 bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-2 rounded"
+                    >
+                      Update Plan
                     </button>
                   )}
                 </div>

@@ -35,7 +35,7 @@ function App() {
       <Router>
         <AuthProvider>
           <GymProvider>
-          <SnackbarProvider />
+            <SnackbarProvider />
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/" element={<DashboardPage />} />
@@ -63,6 +63,10 @@ function App() {
               <Route path="/gym/:gymId/groups" element={<GroupList />} />
               <Route
                 path="/gym/:gymId/add-subscription/:memberId"
+                element={<AddSubscriptionPage />}
+              />
+              <Route
+                path="/gym/:gymId/add-subscription/:memberId/:subscriptionId"
                 element={<AddSubscriptionPage />}
               />
               <Route path="/gym/:gymId/payment" element={<PaymentPage />} />{" "}

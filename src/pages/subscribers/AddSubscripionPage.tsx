@@ -2,14 +2,18 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import GymPanel from "../../components/Gympanel";
 import moment from "moment";
-import { createSubscription } from "../../service/subscriptions/addSubscription";
 import { getGroups } from "../../service/group/groupService";
 import Group from "../group/types/Group";
 import SubscriptionPlan from "../../service/subscription-plan/types/SubscriptionPlan";
 import getSubscriptionPlans from "../../service/subscription-plan/getSubscriptionPlan";
 import { enqueueSnackbar } from "notistack";
+import {
+  createSubscription,
+  updateSubscription,
+} from "../../service/subscriptions/addSubscription";
+import { getSubscriptionById } from "../../service/subscriptions/getSusbcription";
 
-const AddSubscriptionPage = () => {
+const AddOrUpdateSubscriptionPage = () => {
   const navigate = useNavigate();
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
@@ -17,55 +21,107 @@ const AddSubscriptionPage = () => {
     null
   );
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
-  const [coupon, setCoupon] = useState<any>("");
-  const [startDate, setStartDate] = useState<any>(
+  const [coupon, setCoupon] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>(
     moment().format("YYYY-MM-DD")
   );
-  const [_loading, setLoading] = useState<any>(false);
+  const [holdDates, setHoldDates] = useState<
+    { pauseDate: string; restartDate: string }[]
+  >([]);
+  const [_loading, setLoading] = useState<boolean>(false);
 
-  const { gymId, memberId } = useParams();
+  const { gymId, memberId, subscriptionId } = useParams();
 
   useEffect(() => {
-    if (!(gymId && memberId)) return;
+    if (!gymId || !memberId) return;
 
-    const fetchPlansAndGroups = async () => {
+    const fetchInitialData = async () => {
       try {
         setLoading(true);
-        const plans = await getSubscriptionPlans(gymId!);
-        const groups = await getGroups(gymId);
+
+        const [plans, groups, subscription] = await Promise.all([
+          getSubscriptionPlans(gymId!),
+          getGroups(gymId),
+          subscriptionId ? getSubscriptionById(subscriptionId) : null,
+        ]);
+
         setPlans(plans);
         setGroups(groups);
-        console.log({
-          plans,
-          groups,
-        });
+
+        if (subscription) {
+          setSelectedPlan(
+            plans.find((plan) => plan._id === subscription.planId._id) || null
+          );
+          setSelectedGroup(
+            groups.find((group: any) => group._id === subscription.groupId) ||
+              null
+          );
+          setStartDate(moment(subscription.startDate).format("YYYY-MM-DD"));
+          setHoldDates(
+            subscription.holdDate?.map((hold: any) => ({
+              pauseDate: moment(hold.pauseDate).format("YYYY-MM-DD"),
+              restartDate: moment(hold.restartDate).format("YYYY-MM-DD"),
+            })) || []
+          );
+        }
       } catch (error) {
-        console.error("Error fetching plans and groups:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPlansAndGroups();
-  }, [gymId, memberId]);
+    fetchInitialData();
+  }, [gymId, memberId, subscriptionId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
-      await createSubscription({
+      const payload = {
         memberId: memberId!,
         groupId: selectedGroup?._id || "",
         planId: selectedPlan?._id || "",
         startDate,
-      });
-      enqueueSnackbar("New subscription added", { variant: "success" });
+        holdDate: holdDates,
+      };
+
+      if (subscriptionId) {
+        await updateSubscription(subscriptionId, payload);
+        enqueueSnackbar("Subscription updated successfully", {
+          variant: "success",
+        });
+      } else {
+        await createSubscription(payload);
+        enqueueSnackbar("New subscription added", { variant: "success" });
+      }
+
       navigate(`/gym/${gymId}/subscribers`);
     } catch (error) {
-      console.error("Error adding subscription:", error);
+      console.error("Error saving subscription:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleHoldDateChange = (
+    index: number,
+    field: "pauseDate" | "restartDate",
+    value: string
+  ) => {
+    setHoldDates((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const addHoldDate = () => {
+    setHoldDates((prev) => [...prev, { pauseDate: "", restartDate: "" }]);
+  };
+
+  const removeHoldDate = (index: number) => {
+    setHoldDates((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -73,7 +129,7 @@ const AddSubscriptionPage = () => {
       <div className="flex justify-center items-center min-h-screen bg-gray-900">
         <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
           <h1 className="text-3xl font-bold mb-4 text-white text-center">
-            Add Subscription
+            {subscriptionId ? "Update Subscription" : "Add Subscription"}
           </h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -95,11 +151,7 @@ const AddSubscriptionPage = () => {
               >
                 <option value="">Select a plan</option>
                 {plans.map((plan) => (
-                  <option
-                    className="w-full p-2 border border-gray-700 rounded bg-gray-700 text-white"
-                    key={plan._id}
-                    value={plan._id}
-                  >
+                  <option key={plan._id} value={plan._id}>
                     {plan.planName}
                   </option>
                 ))}
@@ -125,11 +177,7 @@ const AddSubscriptionPage = () => {
               >
                 <option value="">Select a group</option>
                 {groups.map((group) => (
-                  <option
-                    className="w-full p-2 border border-gray-700 rounded bg-gray-700 text-white"
-                    key={group._id}
-                    value={group._id}
-                  >
+                  <option key={group._id} value={group._id}>
                     {group.groupName}
                   </option>
                 ))}
@@ -151,41 +199,62 @@ const AddSubscriptionPage = () => {
                 className="w-full p-2 border border-gray-700 rounded bg-gray-700 text-white"
               />
             </div>
+
             <div className="mb-4">
               <label
-                htmlFor="paymentInfo"
+                htmlFor="holdDates"
                 className="block text-lg font-medium mb-2 text-white"
               >
-                Subscription Information
+                Hold Dates
               </label>
-              <div
-                id="paymentInfo"
-                className="w-full p-2 border border-gray-700 rounded bg-gray-700 text-white"
+              {holdDates.map((hold, index) => (
+                <div key={index} className="mb-2 space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="date"
+                      value={hold.pauseDate}
+                      onChange={(e) =>
+                        handleHoldDateChange(index, "pauseDate", e.target.value)
+                      }
+                      className="w-1/2 p-2 border border-gray-700 rounded bg-gray-700 text-white"
+                    />
+                    <input
+                      type="date"
+                      value={hold.restartDate}
+                      onChange={(e) =>
+                        handleHoldDateChange(
+                          index,
+                          "restartDate",
+                          e.target.value
+                        )
+                      }
+                      className="w-1/2 p-2 border border-gray-700 rounded bg-gray-700 text-white"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeHoldDate(index)}
+                      className="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addHoldDate}
+                className="bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded mt-2"
               >
-                {selectedPlan && (
-                  <div className="mb-2 text-white">
-                    <p>Price: ${selectedPlan.price}</p>
-                    <p>Duration: {selectedPlan.durationInDays} days</p>
-                  </div>
-                )}
-
-                {selectedGroup && (
-                  <div className="mb-4 text-white">
-                    <p className="font-bold">Timing</p>
-                    <p>
-                      {" "}
-                      {selectedGroup.startTime} - {selectedGroup.endTime}
-                    </p>
-                  </div>
-                )}
-              </div>
+                Add Hold Date
+              </button>
             </div>
+
             <div className="mb-4">
               <label
                 htmlFor="coupon"
                 className="block text-lg font-medium mb-2 text-white"
               >
-                Coupon Code (optional)
+                Coupon Code
               </label>
               <input
                 type="text"
@@ -193,14 +262,16 @@ const AddSubscriptionPage = () => {
                 value={coupon}
                 onChange={(e) => setCoupon(e.target.value)}
                 className="w-full p-2 border border-gray-700 rounded bg-gray-700 text-white"
+                placeholder="Enter coupon code (optional)"
               />
             </div>
 
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded w-full"
+              disabled={_loading}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded"
             >
-              Add Subscription
+              {_loading ? "Saving..." : subscriptionId ? "Update" : "Add"}
             </button>
           </form>
         </div>
@@ -209,4 +280,4 @@ const AddSubscriptionPage = () => {
   );
 };
 
-export default AddSubscriptionPage;
+export default AddOrUpdateSubscriptionPage;

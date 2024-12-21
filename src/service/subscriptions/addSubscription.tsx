@@ -40,3 +40,28 @@ export const getMembersByGym = async (gymId: string): Promise<Member[]> => {
   }
 };
 
+export const holdSubscriptionPlan = async (
+  id: string,
+  data: {
+    pauseDate: string;
+    restartDate: string;
+  }
+): Promise<any> => {
+  try {
+    const response = await apiClient.post(`/subscriptions/${id}/hold`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to Add Subscription", id, error);
+    throw error;
+  }
+};
+
+export const updateSubscription = async (id: string, data: any) => {
+  try {
+    const response = await apiClient.patch(`/subscriptions/${id}/hold`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to Add Subscription", id, error);
+    throw error;
+  }
+};
